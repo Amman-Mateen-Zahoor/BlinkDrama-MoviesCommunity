@@ -1,0 +1,62 @@
+import { StyleSheet, Text, TextInput, Touchable, TouchableOpacity, View ,Image } from 'react-native'
+import React, { useState } from 'react'
+import { launchImageLibrary } from 'react-native-image-picker';
+
+const ImageEditorSendProposal = () => {
+
+  const [filePath, setFilePath] = useState("");
+  const [imageData, setImagData] = useState({
+    uri: 'file:///data/user/0/com.blinkdramaproject/cache/rn_image_picker_lib_temp_9220858f-3991-4c7d-b140-a034d1a1c8d6.jpg',
+    name: '',
+    type: '',
+  });
+  const getIamgeGallery = () => {
+    let optinos = {mediaType: 'photo'};
+    launchImageLibrary(optinos, responce => {
+      setFilePath(responce.assets[0].uri);
+
+      setImagData({
+        uri: responce.assets[0].uri,
+        name: responce.assets[0].fileName,
+        type: responce.assets[0].type,
+      });
+      console.log(imageData);
+    });
+  };
+  return (
+    <View>
+      <Text>ImageEditorSendProposal.</Text>
+      <View>
+        <TextInput placeholder='MovieId'></TextInput>
+        <TextInput placeholder='Movie_Name'></TextInput>
+        <TextInput placeholder='Genre'></TextInput>
+        <TextInput placeholder='Type'></TextInput>
+        <TextInput placeholder='Due_Date'></TextInput>
+        <View>
+        <TouchableOpacity
+          onPress={() => getIamgeGallery()}
+          style={{
+            height: 35,
+            backgroundColor: 'purple',
+            width: 80,
+            alignItems: 'center',
+            borderRadius: 20,
+            borderWidth: 2,
+          }}>
+          <Text style={{fontSize: 20, color: 'white'}}>library</Text>
+        </TouchableOpacity>
+        <Image
+          source={{uri: imageData.uri}}
+          style={{height: 100, width: 100, borderWidth: 2}}></Image>
+      </View>
+      </View>
+      <View><TouchableOpacity>
+        <Text style={{color:'blue', fontSize:21}}> Send</Text>
+        </TouchableOpacity></View>
+    </View>
+  )
+}
+
+export default ImageEditorSendProposal
+
+const styles = StyleSheet.create({})
