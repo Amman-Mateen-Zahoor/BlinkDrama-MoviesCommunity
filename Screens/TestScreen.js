@@ -11,7 +11,7 @@ const TestScreen = () => {
       <Modal
       transparent={false}
       visible={visible}
-      animationType='slide'
+      animationType='slideeee'
       >
         {/* <View style={{backgroundColor:'fff'}}>
         <Text style={{fontSize:20}}>Hi modaal</Text>
