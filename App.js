@@ -32,7 +32,7 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 // const Tab = createMaterialTopTabNavigator();
 
-global.Url = 'http://192.168.1.219/BlinkBackend';
+global.Url = 'http://192.168.1.106/BlinkBackend';
 
 function AppStack() {
   return (

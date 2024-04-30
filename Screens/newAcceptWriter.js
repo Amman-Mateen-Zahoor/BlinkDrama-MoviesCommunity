@@ -21,7 +21,7 @@ const NewAcceptWriter = ({ navigation }) => {
         }
         
         const data = await response.json();
-        console.log('Data:', data);
+        console.log('I am ShoProposal Data:', data);
         setSentProposals(data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -39,7 +39,14 @@ const NewAcceptWriter = ({ navigation }) => {
           <Text style={styles.text2}>Write Summary</Text>
           <View style={styles.detailsContainer}>
             <View style={styles.imageContainer}>
-              <Image source={require('../Images/teefa.jpeg')} style={styles.image} />
+              {/* <Image source={require('../Images/teefa.jpeg')} style={styles.image} />
+               */}
+
+<Image
+      source={proposal.Image ? { uri: `${global.Url}/Images/${proposal.Image}` } : require('../Images/teefa.jpeg')}
+
+    style={styles.image}
+            />
             </View>
             <View style={styles.details}>
               <Text style={styles.detailText}>Movie Name: {proposal.Movie_Name}</Text>

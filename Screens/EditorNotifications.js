@@ -114,7 +114,7 @@ const EditorNotifications = ({navigation}) => {
       try {
         const response = await fetch(global.Url + '/api/Editor/ReceiveSentProject');
         const data = await response.json();
-        console.log('I m project data',data);
+        console.log('I m project data !!!!!!!!!!!!!',data);
         setProjectData(data.Project);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -150,19 +150,22 @@ const EditorNotifications = ({navigation}) => {
   // };
 
   return (
-    // <ScrollView contentContainerStyle={styles.container}>
-    //   {/* Render dynamic project views */}
-    //   {projectData.map((project) => renderProjectView(project))}
-    // </ScrollView>
+
 <ScrollView contentContainerStyle={styles.container}>
       {/* Render dynamic project views */}
       {projectData.map((project,index) => <View key={project.SentProposal_ID} style={styles.projectContainer}>
         <Text style={styles.movieName}>{project.ProposalData.Movie_Name}</Text>
         <Text style={styles.director}>Directed by {project.ProposalData.Director}</Text>
-        <Image
+        {/* <Image
           source={require('../Images/teefa.jpeg')}
           style={styles.image}
         />
+         */}
+         <Image
+      source={project.ProposalData.Image ? { uri: `${global.Url}/Images/${project.ProposalData.Image}` } : require('../Images/teefa.jpeg')}
+
+    style={styles.image}
+            />
         <TouchableOpacity style={styles.viewButton} 
         onPress={()=>{navigation.navigate('ShowView',project)}}
         >

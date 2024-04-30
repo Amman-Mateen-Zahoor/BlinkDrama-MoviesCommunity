@@ -279,9 +279,22 @@ const EditorSendProposal = ({navigation,route}) => {
     console.log(selectedWriter.key)
     
     try {
+      const formData = new FormData();
+      formData.append('Image', image);
       const response = await fetch(
-        `${global.Url}/api/Editor/perpossal?MoviName=${encodedMovieName}&director=${encodedDirector}&DueDate=${formattedDate}&status=sent&WriterId=3`
+        `${global.Url}/api/Editor/perpossal?MoviName=${encodedMovieName}
+        &director=${encodedDirector}&DueDate=${formattedDate}&status=sent&WriterId=3&imagePath=${image}`
+        // {
+        //   method: 'POST',
+        //   headers: {
+        //    Accept: 'application/json',
+        //     'Content-Type': 'multipart/form-data',
+        //   },
+        //   body: formData,
+        // });
       );
+        
+      
   
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -298,6 +311,39 @@ const EditorSendProposal = ({navigation,route}) => {
       alert('Error occurred while sending data.');
     }
   };
+
+  const SendNew = async () => {
+    const formattedDate = `${date.getMonth() + 1}-${date.getDate()}-${date.getFullYear()}`;
+    const encodedMovieName = encodeURIComponent(selectedMovie[0].value);
+    const encodedDirector = encodeURIComponent(director);
+    const formData = new FormData();
+    formData.append('Movie_Id', movieID);
+    formData.append('Movie_Name', encodedMovieName);
+    formData.append('Genre', genre);
+    formData.append('Type', type);
+    formData.append('Director', encodedDirector);
+    formData.append('Image', image);
+    formData.append('DueDate', formattedDate);
+    
+    
+    const responce = await fetch(global.Url + '/api/Editor/SentProposal', {
+      method: 'POST',
+      headers: {
+       Accept: 'application/json',
+        'Content-Type': 'multipart/form-data',
+      },
+      body: formData,
+    });
+
+    var data = await responce.json();
+    console.warn(data)
+    console.log("Clicked")
+    SetVisible(false)
+    setRefreshComponent(true)
+    
+  };
+
+
   
 
   const onChange = (event, selectedDate) => {
@@ -364,7 +410,7 @@ const EditorSendProposal = ({navigation,route}) => {
         name: responce.assets[0].fileName,
         type: responce.assets[0].type,
       });
-      console.log(imageData);
+      console.log('I m image data',imageData);
     });
   };
 
@@ -388,11 +434,11 @@ const EditorSendProposal = ({navigation,route}) => {
         setSelected={(e) => {
           const data = movies.filter((a) => a.key === e);
           setSelectedMovie(data);
-          console.log('I am selected '.selectedMovie)
+          console.log('I am selected Movie  '.selectedMovie)
           setDirector(data[0].Director);
           setCategory(data[0].Category);
           SetImage(data[0].Image)
-          console.log(image)
+          console.log('i.m Img',image)
         }}
       />
       <View style={styles.signUpContainer}>
