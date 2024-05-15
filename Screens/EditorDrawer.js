@@ -258,7 +258,7 @@ const EditorDrawer = () => {
     useEffect(() => {
         const fetchProposalData = async () => {
             try {
-                const response = await fetch(global.Url + '/api/Editor/ShowSentProposals?editorId=1573719806');
+                const response = await fetch(global.Url + '/api/Editor/ShowSentProposals?editorId=1');
                 const data = await response.json();
                 console.log('no data', data)
                 setProposals(data);
@@ -280,13 +280,13 @@ const EditorDrawer = () => {
                     <Text style={styles.text}>Writer Name: {proposal.WriterName}</Text>
                     <Text style={styles.text}>Movie Name: {proposal.Movie_Name}</Text>
                     <Text style={styles.text}>Type: {proposal.Type}</Text>
-                    <Text style={styles.text}>Genre: {proposal.Genre}</Text>
+                    {/* <Text style={styles.text}>Genre: {proposal.Genre}</Text> */}
                     <Text style={styles.text}>Due Date: {proposal.DueDate}</Text>
                     <Text style={styles.text}>Status: {proposal.Status}</Text>
                 </View>
             ))}
         </ScrollView>
-    );
+    );WriterName
 };
 
 const styles = StyleSheet.create({

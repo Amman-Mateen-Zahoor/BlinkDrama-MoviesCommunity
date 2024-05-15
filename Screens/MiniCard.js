@@ -48,7 +48,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet ,Dimensions } from 'rea
 const MiniCard = ({ videoId,title,channel,midata}) => {
     // const MiniCard = ({ videoId, title, channel }) => {
       // console.log('kkkkkkkkkkkkkkkkkkkkkkkkkkk',videoId,midata)
-      console.log('kkkkkkkkkkkkkkkkkkkkkkkkkkk',videoId,midata)
+      // im last comment console.log('kkkkkkkkkkkkkkkkkkkkkkkkkkk',videoId,midata)
       const navigation = useNavigation()
   return (
     <TouchableOpacity

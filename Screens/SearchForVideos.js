@@ -112,7 +112,7 @@ import {useTheme} from '@react-navigation/native'
 
 const SearchScreen = ({navigation , route})=>{
     const midata = route.params
-    console.log('I m midata from Accept propsal screen',midata) 
+    // im last comment console.log('I m midata from Accept propsal screen',midata) 
     const {colors} =  useTheme()
     const mycolor = colors.iconColor
 
@@ -135,8 +135,8 @@ const SearchScreen = ({navigation , route})=>{
             // const duration = data.items
             // console.log('??????????????????????????????????Video Duration:', duration);
             const duration = data.contentDetails;
-    console.log('Video Duration:', duration);
-            console.log(data.type)
+    // im last comment console.log('Video Duration:', duration);
+            // im last comment console.log('i am data.type',data.type)
 
         })
     }
@@ -181,7 +181,7 @@ const SearchScreen = ({navigation , route})=>{
           <FlatList
            data={miniCardData}
            renderItem={({item})=>{
-            console.log('itemmmmmmmmmmmmmmmmmmmmmmmmmmmmm',item)
+            // im last comment console.log('itemmmmmmmmmmmmmmmmmmmmmmmmmmmmm',item)
                return <MiniCard
                 videoId={item.id.videoId}
                 title={item.snippet.title}

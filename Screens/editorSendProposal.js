@@ -233,7 +233,8 @@ const EditorSendProposal = ({navigation,route}) => {
   const [selectedMovie, setSelectedMovie] = useState('');
   const [selectedWriters, setSelectedWriters] = useState([]);
   const [movies, setMovies] = useState([]);
-  const [refreshComponent, setRefreshComponent] = useState(false)
+  const [refreshComponent, setRefreshComponent] = useState(false);
+  const[writerId,SetWId]=useState('');
   const [image,SetImage]= 
   useState
   ('')
@@ -252,9 +253,9 @@ const EditorSendProposal = ({navigation,route}) => {
     const fetchData = async () => {
       const response = await fetch(global.Url + `/api/Writer/GetWriterAccordingToGenre?movieGenre=${category}`);
       const data = await response.json();
-      console.log(data)
+      console.log('category  daaaaattaaa',data)
       setSelectedWriters(data);
-      console.log(selectedWriters)
+      console.log('selectwedwriterr',selectedWriters)
     };
     fetchData();
   }, [category]);
@@ -275,15 +276,22 @@ const EditorSendProposal = ({navigation,route}) => {
   const sendData = async () => {
     const formattedDate = `${date.getMonth() + 1}-${date.getDate()}-${date.getFullYear()}`;
     const encodedMovieName = encodeURIComponent(selectedMovie[0].value);
+    const encodedWriter = encodeURIComponent(selectedWriters[0].key);
     const encodedDirector = encodeURIComponent(director);
-    console.log(selectedWriter.key)
+    const encodedMovieId = encodeURIComponent(selectedMovie[0].key);
+    console.log('encoded keyyy',selectedWriter.key)
+    console.log(formattedDate)
+    console.log(encodedMovieName)
+    console.log(encodedDirector)
+    console.log(encodedWriter)
+    console.log('Movie Id ',encodedMovieId)
     
     try {
       const formData = new FormData();
       formData.append('Image', image);
       const response = await fetch(
-        `${global.Url}/api/Editor/perpossal?MoviName=${encodedMovieName}
-        &director=${encodedDirector}&DueDate=${formattedDate}&status=sent&WriterId=3&imagePath=${image}`
+        `${global.Url}/api/Editor/perpossal?MoviName=${encodedMovieName}&type=Movie&movieId=${encodedMovieId}
+        &director=${encodedDirector}&editorId=1&DueDate=${formattedDate}&status=sent&WriterId=${encodedWriter}&imagePath=${image}&balance=${balance}`
         // {
         //   method: 'POST',
         //   headers: {
@@ -316,6 +324,7 @@ const EditorSendProposal = ({navigation,route}) => {
     const formattedDate = `${date.getMonth() + 1}-${date.getDate()}-${date.getFullYear()}`;
     const encodedMovieName = encodeURIComponent(selectedMovie[0].value);
     const encodedDirector = encodeURIComponent(director);
+    const encodedWriter = encodeURIComponent(selectedWriters[0].key);
     const formData = new FormData();
     formData.append('Movie_Id', movieID);
     formData.append('Movie_Name', encodedMovieName);
@@ -324,7 +333,8 @@ const EditorSendProposal = ({navigation,route}) => {
     formData.append('Director', encodedDirector);
     formData.append('Image', image);
     formData.append('DueDate', formattedDate);
-    
+    formData.append('WriterId',encodedWriter)
+    formData.append('balance',balance)
     
     const responce = await fetch(global.Url + '/api/Editor/SentProposal', {
       method: 'POST',
@@ -365,6 +375,7 @@ const EditorSendProposal = ({navigation,route}) => {
  const[director1,setDirector1]=useState('');
  const[dueDate,SetDueDate]=useState('');
   const [filePath, setFilePath] = useState("");
+  const[balance,SetBalance]=useState("");
   const [imageData, setImagData] = useState({
     uri: 'file:///data/user/0/com.blinkdramaproject/cache/rn_image_picker_lib_temp_9220858f-3991-4c7d-b140-a034d1a1c8d6.jpg',
     name: '',
@@ -378,7 +389,7 @@ const EditorSendProposal = ({navigation,route}) => {
     formData.append('Movie_Name', movieName);
     formData.append('Genre', genre);
     formData.append('Type', type);
-    formData.append('Director', director1);
+    formData.append('Director', director);
     formData.append('Image', imageData);
     formData.append('Cover_Image', imageData);
     
@@ -522,10 +533,22 @@ const EditorSendProposal = ({navigation,route}) => {
       </View>
 
       <View>
-        <Text>{category}</Text>
+        <Text>Genre : {category}</Text>
       </View>
-<Text>add imagae</Text>
-      <SelectList placeholder='Select Writer' data={selectedWriters} setSelected={setSelectedWriter} />
+
+<View style={styles.inputContainer}>
+<TextInput placeholder='Enter Balance'
+onChangeText={SetBalance}
+></TextInput>
+</View>
+      <SelectList placeholder='Select Writer' data={selectedWriters} setSelected={(e)=>{
+        const data=selectedWriters.filter((a)=>a.key===e);
+        setSelectedWriters(data)
+        console.log('i am  2 2 2 2 2',data)
+      }
+      }
+        
+        />
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={sendData}>

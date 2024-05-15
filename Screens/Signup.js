@@ -278,6 +278,7 @@ export default function Signup({navigation}) {
   const [password, setPassword] = useState('');
 
   const [email, setEmail] = useState('');
+  const[Interest,SetInterest]=useState('');
 
   const uplodeImage = async () => {
     const formData = new FormData();
@@ -288,6 +289,7 @@ export default function Signup({navigation}) {
     formData.append('Email', email);
     formData.append('Image', imageData);
     formData.append('Role', role);
+    formData.append('Interest',Interest);
     
     const responce = await fetch(global.Url + '/api/User/SignUp', {
       method: 'POST',
@@ -406,7 +408,10 @@ export default function Signup({navigation}) {
           />
         </Text>
       </View>
-
+      <TextInput
+        style={style.input}
+        placeholder="Interests"
+        onChangeText={SetInterest}></TextInput>
       <TouchableOpacity style={style.button} onPress={uplodeImage}>
         <Text style={style.buttonText}>
           Signup

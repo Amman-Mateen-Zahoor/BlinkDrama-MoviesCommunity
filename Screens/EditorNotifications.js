@@ -1,113 +1,13 @@
-// import { ScrollView, StyleSheet, Text, View ,Image,TouchableOpacity } from 'react-native'
-// import React, { useEffect, useState } from 'react'
-
-
-// const EditorNotifications = () => {
-//   const[sendEditor,SetSendEditor]=useState({})
-//   const[ScreenData,setScreenData]=useState({})
-//   useEffect(()=>{
-//     const login=async()=>{
-//       const responce= await fetch(global.Url + `/api/Editor/ReceiveSentProject`)
-//       const data= await responce.json()
-//       console.log(data)
-//       console.log(data.Project[0].ProposalData.Movie_Name)
-//       setScreenData(data.Project[0].ProposalData)
-//       SetSendEditor(data)
-      
-//     }
-//     login()
-//   },[])
-//   return (
-    
-//  <View style={{backgroundColor:'#2D3748', flex:1}}>
-//  <View style={{paddingTop:20}}>
-//     <View style={style.view1}>
-//       <Text style={style.text2}>
-//          Summary</Text>
-//         <View style={style.view2}>
-//           <View style={{paddingLeft:28}}>
-//           <Image source={require('../Images/teefa.jpeg')} 
-//           style={style.image}
-//           />
-//           </View>
-//           <View style={{paddingLeft:20}}>
-//             <Text style={{fontSize:18,fontWeight:'bold',}}>
-              
-//             {ScreenData?.Movie_Name}
-//             </Text>
-//             <Text style={{fontSize:18,fontWeight:'bold',}}>
-//             Director : {ScreenData?.Director}
-//             </Text>
-//             {/* <Text style={{fontSize:18,fontWeight:'bold',}}>
-//             Due Date : 20/4/2023 
-//             </Text> */}
-           
-//             <View><TouchableOpacity style={style.button}>
-//         <Text style={style.buttonText}>View</Text>
-//         </TouchableOpacity></View>
-//     </View>
-//         </View>
-//     </View>
-//     </View>
-//     <View/>
-//     </View>
-
-//   )
-// }
-
-// export default EditorNotifications
-
-// const style =StyleSheet.create({
-//     text:{
-//     marginTop:20,alignSelf:'center',color:'yellow',fontSize:30,textDecorationLine:'underline',marginBottom:30
-//     },
-//     view1:{ 
-//     paddingTop:13,backgroundColor:'#333333',borderRadius:50,
-//     }
-//     ,
-    
-//     text2:{
-//      color:'yellow',alignSelf:'center',paddingBottom:10,fontSize:20,fontWeight:'bold'        
-//     },
-//     view2:{
-//     flexDirection:'row'
-//     },
-//     image: {
-//     width: 80,
-//     height: 120,
-//     borderRadius: 10, // example border radius
-//     resizeMode: 'cover', // example resizeMode
-//     },
-//     textContent:{
-//     paddingStart:10,
-//     fontSize:20
-//     },
-//     button: {
-//         marginBottom:150,
-//         backgroundColor: 'yellow',
-//         paddingVertical: 12,
-//         paddingHorizontal: 50,
-//         borderRadius: 9,
-//         alignSelf:'center'
-      
-//       },
-//       buttonText: {
-//         color: 'black',
-//         fontSize: 16,
-//         fontWeight: 'bold',
-//         textAlign: 'center',
-//       },
-//     }
-//       )
-  
-
-
-
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 
 const EditorNotifications = ({navigation}) => {
   const [projectData, setProjectData] = useState([]);
+
+
+useEffect(()=>{
+  console.log('I ma updated Project data',projectData)
+},[projectData])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -116,6 +16,7 @@ const EditorNotifications = ({navigation}) => {
         const data = await response.json();
         console.log('I m project data !!!!!!!!!!!!!',data);
         setProjectData(data.Project);
+
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -123,55 +24,28 @@ const EditorNotifications = ({navigation}) => {
     fetchData();
   }, []);
 
-  // const ViewData = () => {
-  //   return (
-  //     // navigation.navigate('ShowView',projectData)
-  //   );
-  // }
-  
-
-  // Function to render dynamic project view
-  // const renderProjectView = (project) => {
-  //   return (
-  //     <View key={project.SentProposal_ID} style={styles.projectContainer}>
-  //       <Text style={styles.movieName}>{project.ProposalData.Movie_Name}</Text>
-  //       <Text style={styles.director}>Directed by {project.ProposalData.Director}</Text>
-  //       <Image
-  //         source={require('../Images/teefa.jpeg')}
-  //         style={styles.image}
-  //       />
-  //       <TouchableOpacity style={styles.viewButton} 
-  //       onPress={()=>{navigation.navigate('ShowView')}}
-  //       >
-  //         <Text style={styles.buttonText}>View Details</Text>
-  //       </TouchableOpacity>
-  //     </View>
-  //   );
-  // };
 
   return (
+    // <View><Text>sss</Text></View>
 
 <ScrollView contentContainerStyle={styles.container}>
       {/* Render dynamic project views */}
-      {projectData.map((project,index) => <View key={project.SentProposal_ID} style={styles.projectContainer}>
-        <Text style={styles.movieName}>{project.ProposalData.Movie_Name}</Text>
-        <Text style={styles.director}>Directed by {project.ProposalData.Director}</Text>
-        {/* <Image
-          source={require('../Images/teefa.jpeg')}
-          style={styles.image}
-        />
-         */}
-         <Image
+      {projectData.map((project,index) => 
+      <View key={project.SentProposal_ID} style={styles.projectContainer}>
+    <Text style={styles.movieName}>{project.ProposalData.Movie_Name}</Text>
+    <Text>ppopopopop{project.SentProposal_ID}</Text>
+    <Text style={styles.director}>Directed by {project.ProposalData.Director}</Text>
+    <Text style={styles.director}>Writer Name: {project.Writer_Name}</Text>
+    <Image
       source={project.ProposalData.Image ? { uri: `${global.Url}/Images/${project.ProposalData.Image}` } : require('../Images/teefa.jpeg')}
-
-    style={styles.image}
-            />
-        <TouchableOpacity style={styles.viewButton} 
-        onPress={()=>{navigation.navigate('ShowView',project)}}
-        >
-          <Text style={styles.buttonText}>View Details</Text>
-        </TouchableOpacity>
-      </View>)}
+      style={styles.image}
+    />
+    <TouchableOpacity style={styles.viewButton} onPress={() => { navigation.navigate('ShowView', project) }}>
+      <Text style={styles.buttonText}>View Details</Text>
+    </TouchableOpacity>
+  </View>
+    
+    )}
     </ScrollView>
 
   );

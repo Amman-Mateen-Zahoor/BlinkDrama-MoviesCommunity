@@ -3,37 +3,92 @@ import { View, Text, TextInput, StyleSheet, Touchable, TouchableOpacity,Pressabl
 import React, { useEffect, useState } from 'react'
 import {ArrowRightIcon } from 'react-native-heroicons/outline'
 import WriterMainScreen from './WriterMainScreen'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
 export default function Login({navigation}) {
   const [email,setEmail]=useState('')
   const [password,setPassword]=useState('')
+  const [id,SetId]= useState('')
+  // const saveLoginInfo = async (Id) => {
+  //   try {
+  //     await AsyncStorage.setItem('Id', id);
+  //     await AsyncStorage.setItem('wId',id);
+  //     console.log('Login information saved successfully!');
+  //   } catch (error) {
+  //     console.log('Error saving login information:', error);
+  //   }
+  // };
+  // const getLoginInfo = async () => {
+  //   try {
+  //     const username = await AsyncStorage.getItem('Id');
+      
+  //     if (username !== null && password !== null) {
+  //       // Login with the retrieved username and password
+  //       console.log('Retrieved login information:');
+        
+  //     } else {
+  //       console.log('No login information found.');
+  //     }
+  //   } catch (error) {
+  //     console.log('Error retrieving login information:', error);
+  //   }
+  // };
   // const [uData,SetUData]=useState('')
-  const login=async()=>{
-    const responce= await fetch(global.Url + `/api/User/Login?email=${email}&password=${password}`)
-    const data= await responce.json()
-    console.log('i am login data',data)
-    const SendWriterId = data.UserData.Writer_ID
-    console.log('i am writerId',SendWriterId)
-    // SetUData(data)
-    // console.log('kuch nii',uData.UserData.Image)
+//   const login=async()=>{
+//     const responce= await fetch(global.Url + `/api/User/Login?email=${email}&password=${password}`)
+//     const data= await responce.json()
+//     console.log('i am login data',data)
+//     const SendWriterId = data.UserData.Writer_ID
+//     console.log('i am writerId',SendWriterId)
+//     // SetUData(data)
+//     // console.log('kuch nii',uData.UserData.Image)
 
-//     const writerID = data.UserData.Writer_ID;
-// console.log(writerID); // Output: 3
+// //     const writerID = data.UserData.Writer_ID;
+// // console.log(writerID); // Output: 3
 
 
-    console.log(data.Role)
-    if (data.Role==='Writer') {
-      navigation.navigate('WriterMainScreen', data);
-
-    }
-    else if(data.Role==='Editor'){
-      navigation.navigate('EditorMainScreen',data)
-    }
-     else {
-       console.log("bbbbbbbbbb")
-       alert(JSON.stringify(data));
-    }
+//     console.log(data.Role)
+//     if (data.Role === 'Writer') {
+//       navigation.navigate('WriterMainScreen', 123);
+//     }
+//     else if(data.Role==='Editor'){
+//       navigation.navigate('EditorMainScreen',data)
+//     }
+//      else {
+//        console.log("bbbbbbbbbb")
+//        alert(JSON.stringify(data));
+//     }
     
+//   }
+
+
+const login = async () => {
+  try {
+    const response = await fetch(global.Url + `/api/User/Login?email=${email}&password=${password}`);
+    const data = await response.json();
+    console.log('Login data:', data);
+    
+    if (data.Role === 'Writer') {
+      const writerId = data.UserData.Writer_ID;
+      console.log('Writer ID:', writerId);
+      SetId(writerId)
+      
+      navigation.navigate('WriterMainScreen',  {writerId} );
+    } else if (data.Role === 'Editor') {
+      navigation.navigate('EditorMainScreen', data);
+    } else {
+      console.log('Invalid role:', data.Role);
+      alert(JSON.stringify(data));
+    }
+  } catch (error) {
+    console.error('Login error:', error);
+    alert('Error occurred while logging in.');
   }
+};
+
+
+
+
   // useEffect(()=>{}),[uData]
     return (
     <View style={{backgroundColor:'#2D3748', flex:1}}>

@@ -25,6 +25,7 @@ import VideoNavigation from './Screens/VideoNavigation';
 import VideoPlayer from './Screens/VideoPlayer';
 import ImageEditorSendProposal from './Screens/ImageEditorSendProposal';
 import EditorShowView from './EditorShowView';
+import TestScreenNo2 from './Screens/TestScreenNo2';
 
 
 AppRegistry.registerComponent(appName, () =>App);

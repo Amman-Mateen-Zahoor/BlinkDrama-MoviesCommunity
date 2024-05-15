@@ -3,13 +3,15 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView } from 'react-native';
 import navigation from '../Navigation/Navigation'; // Ensure if this import is necessary and properly used
 
-const NewAcceptWriter = ({ navigation }) => {
+const NewAcceptWriter = ({ navigation ,route}) => {
   const [sentProposals, setSentProposals] = useState([]);
+  const { writerId } = route.params || {};
 
+console.log(writerId)
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(global.Url + `/api/Writer/ShowAcceptedProposals?Writer_ID=3`);
+        const response = await fetch(global.Url + `/api/Writer/ShowAcceptedProposals?Writer_ID=770219580`);
         
         if (!response.ok) {
           throw new Error('Failed to fetch data');
