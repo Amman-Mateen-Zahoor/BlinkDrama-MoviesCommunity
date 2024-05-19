@@ -28,7 +28,7 @@ import EditorShowView from './EditorShowView';
 import TestScreen from './Screens/TestScreen';
 import TestScreenNo2 from './Screens/TestScreenNo2';
 import ShowCommnent from './Screens/ShowCommnent';
-
+import EditorAllHistory from './Screens/EditorAllHistory';
 
 
 
@@ -37,7 +37,7 @@ const Tab = createBottomTabNavigator();
 // const Tab = createMaterialTopTabNavigator();
 const DataContext = createContext();
 
-global.Url = 'http://192.168.100.13/BlinkBackend';
+global.Url = 'http://192.168.0.105/BlinkBackend';
 
 function AppStack() {
   const [sharedData, setSharedData] = useState(null);
@@ -205,7 +205,7 @@ function EditorAppTab() {
         
         tabBarBadgeStyle: {backgroundColor:'yellow'}
        }}
-      component={EditorDrawer}/>
+      component={EditorAllHistory}/>
       <Tab.Screen name='Home5' 
        options={{
         tabBarIcon:({color , size})=>(

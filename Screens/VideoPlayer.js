@@ -13,7 +13,7 @@ const VideoPlayer = ({ route , navigation }) => {
   const [sliderValues, setSliderValues] = useState([0, 1]);
   const [videoUrl, setVideoUrl] = useState('https://www.youtube.com/embed/${dataa.videoId}?start=0&end=65');
 const [compoundUrl, SetCopoundUrl]=useState([])
-
+const[test,SetTest]=useState('&autoplay=1')
 useEffect(()=>{},[videoUrl])
 useEffect(() => {
   console.log('Updated compoundUrl:', compoundUrl);
@@ -50,9 +50,9 @@ useEffect(() => {
     const start = values[0];
     const end = values[1];
     const newUrl = `https://www.youtube.com/embed/${dataa.videoId}?start=${start}&end=${end}`;
-    const newObject = { videoUrl: newUrl /*, other properties if any */ };
+    const newObject = { videoUrl: newUrl, /*, other properties if any */ };
     setVideoUrl(newUrl);
-    console.log('immm',videoUrl)
+    // thissss wassss comment coz it showssss consoleee console.log('immm',videoUrl)
    
     // SetCopoundUrl(prevCompoundUrl => [...prevCompoundUrl, newObject]);
     // console.log('loloo',compoundUrl)

@@ -11,11 +11,11 @@ const ShowingWritreCliping = ({ route }) => {
  const richText = useRef();
   
   let data = route.params;
-  console.log('i am showwriteer data', data);
-  console.log('data of compound clips', data.compound) 
+  // console.log('i am showwriteer data', data);
+  // console.log('data of compound clips', data.compound) 
   // setSentPropossal('i a m compound clip array',data.compound)
   const apple=data.data1.midata
-  console.log('imm aple',apple)
+  // console.log('imm aple',apple)
   useEffect(()=>{
     // // const data= route.params.proposal;
     // const data= route.params;
@@ -45,7 +45,7 @@ const ShowingWritreCliping = ({ route }) => {
   };
 
   const parseYouTubeUrls = () => {
-    console.log('I am Daata.compoundddddddddddd',data.compound)
+    // console.log('I am Daata.compoundddddddddddd',data.compound)
     const parsedUrls = data.compound.map(url => {
       const parameters = extractParameters(url.clip);
       return {

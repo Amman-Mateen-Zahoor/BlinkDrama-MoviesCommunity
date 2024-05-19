@@ -26,6 +26,9 @@ import VideoPlayer from './Screens/VideoPlayer';
 import ImageEditorSendProposal from './Screens/ImageEditorSendProposal';
 import EditorShowView from './EditorShowView';
 import TestScreenNo2 from './Screens/TestScreenNo2';
+import TestForVideoScreen from './Screens/TestForVideoScreen';
+import EditorProjectHistory from './Screens/EditorProjectHistory';
+import EditorAllHistory from './Screens/EditorAllHistory';
 
 
 AppRegistry.registerComponent(appName, () =>App);

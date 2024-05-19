@@ -282,7 +282,7 @@ export default function Signup({navigation}) {
 
   const uplodeImage = async () => {
     const formData = new FormData();
-    const role = selectedId == 1 ? 'Writer' : 'Reder';
+    const role = selectedId == 1 ? 'Writer' : 'Reader';
     console.log(role);
     formData.append('UserName', username);
     formData.append('Password', password);
@@ -303,6 +303,14 @@ export default function Signup({navigation}) {
     var data = await responce.json();
     console.warn(data)
     console.log("Clicked")
+    if(data!=null){
+      if(data.Role === 'Reader') {
+        navigation.navigate('EditorMainScreen', data);
+      } 
+      (data.Role === 'Writer'); {
+        navigation.navigate('initial', data);
+      } 
+    }
   };
 
   const [selectedId, setSelectedId] = useState();

@@ -66,13 +66,41 @@
 // })
 
 import { View, Text, StyleSheet,Image,TouchableOpacity } from 'react-native'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import navigation from '../Navigation/Navigation'
 import { useNavigation } from '@react-navigation/native'
 
 
 
-const WriterDrawer = () => {
+const WriterDrawer =  () => {
+
+const[username,SetUserName]=useState('')
+const[balance,SetBalance]=useState('')
+const[image,SetImage]= useState('')
+
+  const login = async () => {
+    try {
+      const response = await fetch(global.Url + `/api/User/Login?email=Writer0@gmail.com&password=12345`);
+      const data = await response.json();
+      console.log('Login data:', data);
+      if(data!='Invalid email or password'){
+      const u = data.UserData.UserName
+      SetUserName(u)
+      const b= data.UserData.Balance
+      SetBalance(b)
+      const I = data.UserData.Image
+      SetImage(I)
+   } } catch (error) {
+      console.error('Login error:', error);
+      alert('Error occurred while logging in.');
+    }
+  };
+
+useEffect(
+ ()=>{
+  login();
+ },[])
+
 
 
   return (
@@ -83,16 +111,16 @@ const WriterDrawer = () => {
         </Text>
         <View style={style.view2}>
           <View style={{paddingLeft:28}}>
-          <Image source={require('../Images/Dummy.jpeg')} 
+          <Image   source={image ? { uri: `${global.Url}/Images/${image}` } : require('../Images/teefa.jpeg')}
           style={style.image}
           />
           </View>
           <View style={{paddingLeft:20}}>
             <Text style={{fontSize:18,fontWeight:'bold',}}>
-            Name: Amman mateen
+            Name: {username}
             </Text>
             <Text style={{fontSize:18,fontWeight:'bold',}}>
-            Balance : 3000
+            Balance : {balance}
             </Text>
             <Text style={{fontSize:18,fontWeight:'bold',}}>
             Rating : <Text style={{color:'yellow', fontSize:20}}>* * * * </Text> 

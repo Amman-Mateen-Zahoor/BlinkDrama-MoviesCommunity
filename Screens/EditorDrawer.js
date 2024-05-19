@@ -286,7 +286,7 @@ const EditorDrawer = () => {
                 </View>
             ))}
         </ScrollView>
-    );WriterName
+    )
 };
 
 const styles = StyleSheet.create({

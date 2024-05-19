@@ -74,9 +74,17 @@ const login = async () => {
       SetId(writerId)
       
       navigation.navigate('WriterMainScreen',  {writerId} );
-    } else if (data.Role === 'Editor') {
+    }
+    
+    
+    else if (data.Role === 'Editor') {
       navigation.navigate('EditorMainScreen', data);
-    } else {
+    } 
+    
+    else if (data.Role === 'Reader') {
+      navigation.navigate('EditorMainScreen', data);
+    }
+    else {
       console.log('Invalid role:', data.Role);
       alert(JSON.stringify(data));
     }

@@ -11,7 +11,7 @@ console.log(writerId)
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(global.Url + `/api/Writer/ShowAcceptedProposals?Writer_ID=770219580`);
+        const response = await fetch(global.Url + `/api/Writer/ShowAcceptedProposals?Writer_ID=1537966391`);
         
         if (!response.ok) {
           throw new Error('Failed to fetch data');
