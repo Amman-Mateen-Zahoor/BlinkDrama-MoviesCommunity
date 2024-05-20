@@ -214,12 +214,6 @@ const RewriteProject=async()=>{
             <Text style={{fontSize:18,fontWeight:'bold',paddingTop:28}}>
             Teefa In Trouble
             </Text>
-            {/* <Text style={{fontSize:18,fontWeight:'bold',}}>
-            Director : Abdullah
-            </Text>
-            <Text style={{fontSize:18,fontWeight:'bold',}}>
-            Due Date : 20/4/2023 
-            </Text> */}
             <View style={{flexDirection:'row'}}>
             <TouchableHighlight><Text style={{color:'yellow',borderRadius:12,fontSize:28}}>Status<Text style={{color:'gray'}}>:</Text></Text></TouchableHighlight>
             <TouchableOpacity ><Text style={{color:'yellow',borderRadius:12,fontSize:30}}>Accepted</Text></TouchableOpacity>

@@ -29,6 +29,7 @@ import TestScreenNo2 from './Screens/TestScreenNo2';
 import TestForVideoScreen from './Screens/TestForVideoScreen';
 import EditorProjectHistory from './Screens/EditorProjectHistory';
 import EditorAllHistory from './Screens/EditorAllHistory';
+import ReaderHome from './Screens/ReaderHome';
 
 
 AppRegistry.registerComponent(appName, () =>App);

@@ -29,6 +29,8 @@ import TestScreen from './Screens/TestScreen';
 import TestScreenNo2 from './Screens/TestScreenNo2';
 import ShowCommnent from './Screens/ShowCommnent';
 import EditorAllHistory from './Screens/EditorAllHistory';
+import ReaderShowFreeMovie from './Screens/ReaderShowFreeMovie';
+import ReaderHome from './Screens/ReaderHome';
 
 
 
@@ -37,13 +39,13 @@ const Tab = createBottomTabNavigator();
 // const Tab = createMaterialTopTabNavigator();
 const DataContext = createContext();
 
-global.Url = 'http://192.168.0.105/BlinkBackend';
+global.Url = 'http://192.168.2.124/BlinkBackend';
 
 function AppStack() {
   const [sharedData, setSharedData] = useState(null);
   return (
     
-    <Stack.Navigator initialRouteName='initial'>
+    <Stack.Navigator initialRouteName='ReaderShowFree'>
       <Stack.Screen name="Login" options={{ headerShown: false }} component={Login} />
       <Stack.Screen name="Signup" options={{ headerShown: false }} component={Signup} />
       <Stack.Screen name="SignupToLogin" options={{ headerShown: false }} component={Login} />
@@ -63,6 +65,8 @@ function AppStack() {
       <Stack.Screen name='View' options={{headerShown:false}} component={ShowCommnent}/>
       <Stack.Screen name='Home2' options={{headerShown:false}} component={AppTab2}/>
       <Stack.Screen name='initial' options={{headerShown:false}} component={AppTab}/>
+      <Stack.Screen name='ReaderShowFree' options={{headerShown:false}} component={ReaderHome}/>
+      <Stack.Screen name = 'readerfreeshow' options={{headerShown:false}} component={ReaderShowFreeMovie}/>
     
     </Stack.Navigator>
    
