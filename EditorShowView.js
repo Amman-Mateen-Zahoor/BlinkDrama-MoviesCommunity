@@ -1,12 +1,24 @@
 import React, {useState, useEffect,useRef} from 'react';
-import {View, Dimensions,Modal, Alert,StyleSheet,TextInput, Button, useWindowDimensions} from 'react-native';
+import {View, Dimensions,Modal, Alert,StyleSheet,TextInput, Button, useWindowDimensions, TouchableOpacity, ScrollView} from 'react-native';
 import { Text } from 'react-native-svg';
 import {WebView} from 'react-native-webview';
 import RenderHTML from 'react-native-render-html';
 import { RichEditor, RichToolbar } from 'react-native-pell-rich-editor';
+import { ArrowDownCircleIcon, ArrowLeftIcon } from 'react-native-heroicons/outline';
+
 
 const EditorShowView = ({route}) => {
   const [visible,SetVisible]=useState(false)
+  const [visi2,SetVisi2]=useState(false)
+
+  // const [multiurl, setMultiUrl] = useState(`{"ClipsData": 
+  // [{"Clips_ID": 793362522, "End_time": null, "Start_time": null, "Title": "Title1", "Url": "https://www.youtube.com/embed/InT99AHc8q4?start=35&end=49", "isCompoundClip": true},
+  //  {"Clips_ID": 910559199, "End_time": null, "Start_time": null, "Title": "Title2", "Url": "https://www.youtube.com/embed/InT99AHc8q4?start=0&end=33", "isCompoundClip": true},{"Clips_ID": 793362522, "End_time": null, "Start_time": null, "Title": "Title1", "Url": "https://www.youtube.com/embed/InT99AHc8q4?start=35&end=49", "isCompoundClip": true},
+  //  {"Clips_ID": 910559199, "End_time": null, "Start_time": null, "Title": "Title2", "Url": "https://www.youtube.com/embed/InT99AHc8q4?start=0&end=33", "isCompoundClip": true},{"Clips_ID": 793362522, "End_time": null, "Start_time": null, "Title": "Title1", "Url": "https://www.youtube.com/embed/InT99AHc8q4?start=35&end=49", "isCompoundClip": true},
+  //  {"Clips_ID": 910559199, "End_time": null, "Start_time": null, "Title": "Title2", "Url": "https://www.youtube.com/embed/InT99AHc8q4?start=0&end=33", "isCompoundClip": true}]} `);
+const[multiurl,setMultiUrl]=useState([])
+  // const clipsData = JSON.parse(multiurl).ClipsData;
+
   const richText = useRef();
   const [summary,SetSummary] = useState('Summary DAta')
   const [urls, setUrls] = useState([
@@ -51,7 +63,7 @@ const EditorShowView = ({route}) => {
     console.log('I ma  cuurreeentIndexxxx',currentUrlIndex)
     console.log('I am summary',summary)
 
-  },[urls,currentUrlIndex,summary]);
+  },[urls,currentUrlIndex,summary,multiurl]);
 const[sproId,SetsproId]=useState('')
 
 
@@ -74,6 +86,10 @@ SetsproId(a)
         const summarydata= data.SummaryData.Summary1;
         SetSummary(summarydata)
         const urlse = data.ClipsData.map(clip => clip.Url);
+        const urlse2 = data.ClipsData
+
+        console.log('urlse2>>>>>>>>>>>>>>>>>>',urlse2)
+        setMultiUrl(urlse2)
         setUrls(urlse)
        
         // const urlse = data.ClipsData
@@ -198,6 +214,7 @@ SetsproId(a)
 
   return (
     <View style={styles.container}>
+     
 
 {/* <View><TextInput placeholder={summary}
        multiline={true} 
@@ -209,15 +226,19 @@ SetsproId(a)
 ></TextInput></View> */}
 <Text style={{backgroundColor:'grey'}} >
   
+
       {summary ? <RenderHTML contentWidth={width} 
       style={{Color:'blue'}}
       source={source} /> : console.log(summary)}
       </Text>
+      <Button title='Show Single Clips' onPress={()=>{SetVisi2(true)}}></Button>
+      
       <Modal
       transparent={false}
       visible={visible}
       animationType='slide'
       >
+        
         <View style={{backgroundColor:'#2D3748', flex:1}}><Text>Modal</Text>
         <RichEditor
         ref={richText}
@@ -239,6 +260,61 @@ SetsproId(a)
         source={{uri:urls[currentUrlIndex]}}
         style={{flex:0.5}}
       />
+      
+      
+     <Modal
+     transparent={false}
+     visible={visi2}
+     animationType='slide'
+     >
+      <View style={{
+        flexGrow: 1,
+        backgroundColor: '#1A202C',
+        paddingVertical: 40,
+        paddingHorizontal: 10,
+    }}>
+      <View>
+        <TouchableOpacity onPress={()=>SetVisi2(false)}>
+      <ArrowLeftIcon size={30} color='yellow' / > 
+      </TouchableOpacity></View>
+<View style={{ flex: 1,   paddingVertical: 20,
+        paddingHorizontal: 10 }}>
+            <Text style={{
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 20,
+        textAlign: 'center',
+        color: '#FFFFFF', // White color
+    }}> Descriptions</Text>
+        <ScrollView>
+          
+      {multiurl.map((clip, index) => (
+        
+        <View key={index} 
+        style={{ 
+          width: "100%", height: 200, borderWidth: 1,
+        borderColor: '#cccccc',
+        borderRadius: 10,
+        padding: 20,
+        marginBottom: 50 }}>
+
+
+          <WebView
+            javaScriptEnabled={true}
+            domStorageEnabled={true}
+            source={{ uri: clip.Url }}
+          />
+     {/* <Button title='clip.Title' onPress={Accept} ></Button>      */}
+<Text style={{color:'#fff'}}>{clip.Title}</Text>  
+<Button title={clip.Title} color='black' ></Button>       
+         
+        </View>
+      ))}
+      </ScrollView>
+    </View>
+    </View>
+</Modal>
+     
      <Button title='Accept' onPress={Accept} ></Button>
      <Button title='Add Comment' onPress={()=>SetVisible(true)} ></Button>
     </View>

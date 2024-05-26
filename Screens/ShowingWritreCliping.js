@@ -1,18 +1,18 @@
 
-import React, { useState, useEffect, useRef } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, TextInput } from 'react-native';
+import React, { useState, useEffect, useRef ,useCallback } from 'react';
+import { View, StyleSheet, TouchableOpacity, Text, TextInput, Alert ,Button } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useNavigation } from '@react-navigation/native';
 import { RichEditor, RichToolbar } from 'react-native-pell-rich-editor';
+import YoutubePlayer from "react-native-youtube-iframe";
  
 const ShowingWritreCliping = ({ route }) => {
- const[sendclip,SetSentClip]= useState([{"clip": "https://www.youtube.com/embed/CNqo0m8-ssg?start=0&end=8", "isCompoundClip": true},
-  {"clip": "https://www.youtube.com/embed/CNqo0m8-ssg?start=131&end=174", "isCompoundClip": true}])
+ const[sendclip,SetSentClip]= useState([])
  const richText = useRef();
   
   let data = route.params;
-  // console.log('i am showwriteer data', data);
-  // console.log('data of compound clips', data.compound) 
+  console.log('i am showwriteer data', data);
+  console.log('data of compound clips', data.compound) 
   // setSentPropossal('i a m compound clip array',data.compound)
   const apple=data.data1.midata
   // console.log('imm aple',apple)
@@ -23,93 +23,25 @@ const ShowingWritreCliping = ({ route }) => {
       SetSentClip(data.compound)
     console.log('I am Clipppppp',sendclip)
    
-  },[])
-  const navigation = useNavigation();
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const webViewRef = useRef(null); // Create a ref to access WebView component
+  },[sendclip])
+  const [playing, setPlaying] = useState(true);
+  const[VideoId,SetVideoId]=useState('KILUsa4crzI')
 
+  const onStateChange = useCallback((state) => {
+    if (state === "ended") {
+      setPlaying(false);
+      Alert.alert("video has finished playing!");
+    }
+  }, []);
+
+  const togglePlaying = useCallback(() => {
+    setPlaying((prev) => !prev);
+  }, []);
+
+  const navigation = useNavigation();
   // Update play/pause state based on current index and webview loading
   const [isPlaying, setIsPlaying] = useState(false);
-  const[Summary,setSummary]=useState('')
-  const extractParameters = (data) => {
-    
-    const regex = /[?&](start|end)=([^?&]+)/g;
-    const parameters = {};
-    let match;
-    
-    while ((match = regex.exec(data)) !== null) {
-      parameters[match[1]] = parseInt(match[2]);
-    }
-    console.log('parametersssssssssss',parameters)
-    return parameters;
-  };
-
-  const parseYouTubeUrls = () => {
-    // console.log('I am Daata.compoundddddddddddd',data.compound)
-    const parsedUrls = data.compound.map(url => {
-      const parameters = extractParameters(url.clip);
-      return {
-        url: url,
-        start: parameters.start || 0,
-        end: parameters.end || null
-      };
-    });
-    return parsedUrls;
-  };
-
-  useEffect(() => {
-    
-    const playNextVideo = async () => {
-      console.log(data?.compound[0].clip);
-      if (currentIndex < data.compound.length - 1) {
-        // Ensure webview has loaded before playing
-        if (webViewRef.current) {
-          const videoUrl = data?.compound[currentIndex].clip;
-          const injectScript = `
-            var video = document.querySelector('video');
-            if (video) {
-              video.play();
-            }
-          `;
-          await webViewRef.current.injectJavaScript(injectScript);
-          setIsPlaying(true);
-        }
-        setCurrentIndex(prevIndex => prevIndex + 1);
-      }
-    };
-    const parsedUrls = parseYouTubeUrls();
-    console.log(parsedUrls);
-    const currentVideo = parsedUrls[currentIndex];
-   
-    const videoDuration = (currentVideo.end - currentVideo.start) * 1000; // Convert seconds to milliseconds
-
-    const interval = setInterval(playNextVideo, videoDuration ); // Adjust interval duration as needed
-
-    return () => clearInterval(interval);
-  }, [ currentIndex,data.compound, webViewRef]);
-
-  const handleWebViewLoad = () => {
-    // If webview is the first one, play automatically
-    if (currentIndex === 0) {
-      const injectScript = `
-        var video = document.querySelector('video');
-        if (video) {
-          video.play();
-        }
-      `;
-      webViewRef.current.injectJavaScript(injectScript);
-      setIsPlaying(true);
-    }
-  };
-
-  const handleNavigationStateChange = (navState) => {
-    // Handle potential navigation changes within the WebView
-    if (navState.url.endsWith('.mp4') && navState.canGoBack) {
-      // Assuming videos end in .mp4, go back to trigger playback completion
-      webViewRef.current.goBack();
-    }
-  };
-  
+  const[Summary,setSummary]=useState('') 
 const sendproject = async () => {
   const sendprojectData = {
     SentProposal_ID: apple.SentProposal_ID,
@@ -168,17 +100,23 @@ const sendproject = async () => {
        onChangeText={setSummary}
 ></TextInput></View> */}
 
-      {currentIndex < data.compound.length && (
-        <WebView
-          ref={webViewRef}
-          source={{ uri: data.compound[currentIndex].clip }}
-          style={{ flex: 1 }}
-          javaScriptEnabled={true}
-          domStorageEnabled={true}
-          onLoad={handleWebViewLoad}
-          onNavigationStateChange={handleNavigationStateChange}
-        />
-      )}
+<YoutubePlayer
+  height={300}
+  play={playing}
+  videoId={VideoId}
+  initialPlayerParams={{
+    start: '02',
+    end: '04',
+  }}
+  onChangeState={(event) => {
+    if (event === 'ended') {
+      
+      SetVideoId('iee2TATGMyI')
+    }
+  }}
+/>
+
+
       <View style={{ alignSelf: 'flex-start', paddingLeft: 4, paddingEnd: 5 ,marginTop:20,alignSelf:'center'}}>    
         <TouchableOpacity style={styles.button} onPress={sendproject}> 
           {/* > */}

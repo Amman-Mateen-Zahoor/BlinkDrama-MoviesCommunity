@@ -30,6 +30,9 @@ import TestForVideoScreen from './Screens/TestForVideoScreen';
 import EditorProjectHistory from './Screens/EditorProjectHistory';
 import EditorAllHistory from './Screens/EditorAllHistory';
 import ReaderHome from './Screens/ReaderHome';
+import Subscription from './Screens/Subscription';
+import ReaderSeeAllBtn from './Screens/ReaderSeeAllBtn';
+import TestMultipleVideos from './Screens/TestMultipleVideos';
+import CcheckIFrame from './Screens/CcheckIFrame'
 
-
-AppRegistry.registerComponent(appName, () =>App);
+AppRegistry.registerComponent(appName, () =>TestScreen);

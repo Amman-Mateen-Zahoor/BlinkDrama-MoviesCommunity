@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, ScrollView, Touchable, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
+import { Image } from 'react-native-svg';
 
 const EditorProjectHistory = () => {
 
@@ -30,10 +31,16 @@ const EditorProjectHistory = () => {
        <ScrollView contentContainerStyle={styles.container}>
             <Text style={styles.title}>Accepted Project History</Text>
             {acceptedProject.map((acceptedProject, index) => (
+                
                 <View style={styles.proposalContainer} key={index}>
                     <Text style={styles.text}>Movie Name: {acceptedProject.ProposalData.Movie_Name}</Text>
                     <Text style={styles.text}>Director: {acceptedProject.ProposalData.Director}</Text>
                     <Text style={styles.text}>Type: {acceptedProject.ProposalData.Type}</Text>
+                    <Image 
+      source={acceptedProject.ProposalData.Image ? { uri: `${global.Url}/Images/${acceptedProject.ProposalData.Image}` } : require('../Images/teefa.jpeg')}
+
+    style={styles.image}
+            />
                     <View>
        
         <TouchableOpacity style={styles.button} >

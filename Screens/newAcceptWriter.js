@@ -6,12 +6,12 @@ import navigation from '../Navigation/Navigation'; // Ensure if this import is n
 const NewAcceptWriter = ({ navigation ,route}) => {
   const [sentProposals, setSentProposals] = useState([]);
   const { writerId } = route.params || {};
-
+  const[gId,SetGId]=useState(`${global.wId}`)
 console.log(writerId)
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(global.Url + `/api/Writer/ShowAcceptedProposals?Writer_ID=1537966391`);
+        const response = await fetch(global.Url + `/api/Writer/ShowAcceptedProposals?Writer_ID=${gId}`);
         
         if (!response.ok) {
           throw new Error('Failed to fetch data');

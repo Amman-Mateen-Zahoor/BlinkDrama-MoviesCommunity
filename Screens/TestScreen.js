@@ -1,116 +1,71 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { View, Button ,useWindowDimensions } from 'react-native';
-import { RichEditor, RichToolbar } from 'react-native-pell-rich-editor';
-import RenderHTML from 'react-native-render-html';
- // Make sure to remove this line if you're importing navigation from somewhere else
+import React, { useState, useCallback } from "react";
+import { Button, View, Alert } from "react-native";
+import YoutubePlayer from "react-native-youtube-iframe";
 
-const TestScreen = ({ navigation }) => {
-  const richText = useRef();
-  const [summary, setSummary] = useState('');
+export default function App() {
+  const [playing, setPlaying] = useState(true);
+  // const [videoId, setVideoId] = useState('KILUsa4crzI');
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const videoIds = [
+    'KILUsa4crzI',
+    'iee2TATGMyI',
+    'KILUsa4crzI',
+    'iee2TATGMyI',
+    'KILUsa4crzI'
+    
+  ];
+  // const start = 10;  // Start time in seconds
+  // const end = 13;  // End time in seconds
 
-  // useEffect(() => {
-  //   console.log(summary, 'summary');
-  // }, [summary]);
+  const startTimes = [
+    0,  // Start time for the first video
+    10, // Start time for the second video
+    5,  // Start time for the third video
+    0,  // Start time for the fourth video
+    8   // Start time for the fifth video
+  ];
 
-  // Function to handle button press to get HTML content
-  const onPressGetHTML = async () => {
-    // const html = await richText.current.getContentHtml();
-    // console.log(html);
-    console.log(summary,' i i  am a summary')
-    navigation.navigate('test2',summary)
+  const endTimes = [
+    5,  // End time for the first video
+    15,  // End time for the second video
+    12,  // End time for the third video
+    7,   // End time for the fourth video
+    18   // End time for the fifth video
+  ];
+
+  const onStateChange = useCallback((state) => {
+    if (state === "ended") {
+      // setPlaying(true);
+      // Alert.alert("Video has finished playing!");
+      handleVideoChange();
+    }
+  }, [currentIndex]);
+
+  const togglePlaying = useCallback(() => {
+    setPlaying((prev) => !prev);
+  }, []);
+
+  // const handleVideoChange = () => {
+  //   setVideoId((prevId) => (prevId === 'KILUsa4crzI' ? 'iee2TATGMyI' : 'KILUsa4crzI'));
+  // };
+  const handleVideoChange = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % videoIds.length);
   };
+  
   return (
-    <View style={{ flex: 1 }}>
-      {/* Rich text editor */}
-      <RichEditor
-        ref={richText}
-        placeholder="Start typing..."
-        onChange={setSummary} // Use onChange instead of onTextChange
+    <View>
+      <YoutubePlayer
+        key={videoIds[currentIndex]}
+        height={300}
+        play={playing}
+        videoId={videoIds[currentIndex]}
+        initialPlayerParams={{
+          start: startTimes[currentIndex],
+          end: endTimes[currentIndex],
+        }}
+        onChangeState={onStateChange}
       />
-
-
-      {/* Toolbar for formatting options */}
-      <RichToolbar
-        getEditor={() => richText.current}
-      />
-
-      {/* Button to get HTML content */}
-      <Button title="Get HTML Content" onPress={onPressGetHTML} />
+      <Button title={playing ? "Pause" : "Play"} onPress={togglePlaying} />
     </View>
   );
-};
-
-export default TestScreen;
-
-// import React, { 
-//   useState, useEffect, useRef,
-// } from 'react';
-// import { 
-//   View, StyleSheet, TextInput, Text, useWindowDimensions,
-//   KeyboardAvoidingView, ScrollView
-// } from 'react-native';
-
-
-// const TestScreen = ({lineHeight=20}) => {
-//   const { height, width } = useWindowDimensions()
-//   // determine max number of TextInputs you can make
-//   const maxLines = Math.floor(height/lineHeight);
-//   const [ textLines, setTextLines ] = useState(Array(maxLines).fill(''));
-//   return ( 
-//       <KeyboardAvoidingView 
-//           style={styles.container}
-//           behavior={"height"}
-//       >
-//       <ScrollView style={{height:height,width:'100%'}}>
-//           {/*Make TextInputs to fill whole screen*/}
-//           <View style={{justifyContent:'flex-end'}}>
-            
-//               {textLines.map((text,i)=>{
-//                   let style = [styles.textInput,{height:lineHeight}]
-//                   // if first line give it extra space to look like notebook paper
-//                   if(i ==0)
-//                       style.push({height:lineHeight*3,paddingTop:lineHeight*2})
-//                   return (
-//                   <>
-//                       <TextInput
-//                         style={style}
-//                         onChangeText={newVal=>{
-//                           textLines[i] = newVal
-//                           setTextLines(textLines)
-//                         }}
-//                         key={"textinput-"+i}
-//                       />
-//                   </>
-//                   )
-//               })}
-//               <TextInput
-//       ref={this.textInputRef}
-//       style={styles.input}
-//       multiline={true}
-//       scrollEnabled={true}
-//       onChangeText={this.onChangeText}
-//     ></TextInput>
-//           </View>
-//           </ScrollView>
-//     </KeyboardAvoidingView>
-// )
-// }
-
-// const styles = StyleSheet.create({
-//   container:{
-//       flex:0.5,
-//       // paddingTop:40
-//   },
-//   textInput:{
-//       padding:0,
-//       margin:0,
-//       borderBottomColor:'black',
-//       borderBottomWidth:1,
-//       width:'100%',
-//   }
-  
-// })
-
-// export default TestScreen
-
-
+}

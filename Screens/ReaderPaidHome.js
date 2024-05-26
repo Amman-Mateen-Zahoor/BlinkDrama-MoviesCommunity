@@ -4,7 +4,7 @@ import {WebView} from 'react-native-webview';
 
 
 
-const ReaderHome = ({navigation}) => {
+const ReaderPaidHome = ({navigation}) => {
 
   const[image,SetImage]=useState('')
     const[mname,SetMname]=useState('')
@@ -19,6 +19,7 @@ const ReaderHome = ({navigation}) => {
           const a = data.Project
           setAcceptedProject(a);
           console.log('no data projectttttttttttttt 1', data.Project)
+          console.log('useeeestaattttee',acceptedProject)
           const pimage= data.Project[0].ProposalData.Image
           console.log('no data projectttttttttttttt 2', pimage)
           SetProjectImage(pimage)
@@ -67,7 +68,7 @@ fetchAcceptedProjectData()
                 <TouchableOpacity onPress={()=>navigation.navigate('readerfreeshow',movie)}><View >
     <View style={styles.view1}>
       <Text style={styles.text2}>
-        Show Free Daily</Text>
+        Top Rated Movie</Text>
         <View style={styles.view2}>
           <View style={{paddingLeft:28}}>
           {/* <Image source={require('../Images/teefa.jpeg')} 
@@ -102,7 +103,7 @@ fetchAcceptedProjectData()
       <TouchableOpacity><Text style={styles.RowText}>Top Pick For You                                        </Text>
       </TouchableOpacity>
       <TouchableOpacity
-      onPress={()=>navigation.navigate('Seeallbtn')}
+      onPress={()=>navigation.navigate('Seeallbtnpaid')}
       ><Text>See All</Text></TouchableOpacity>
       </View>
 <View>
@@ -114,8 +115,10 @@ fetchAcceptedProjectData()
           style={styles.image}
           />
           <Text style={{color:'yellow'}}>{acceptedProject.ProposalData.Movie_Name}</Text>
-          <TouchableOpacity style={styles.button} >
-        <Text style={styles.buttonText}>Paid</Text>
+          <Text style={{color:'yellow'}}>{acceptedProject.Movie_ID}</Text>
+
+          <TouchableOpacity style={styles.button} onPress={()=>{{navigation.navigate('paidShowMovie'),{ Movie_ID: acceptedProject.Movie_ID }}}} >
+        <Text style={styles.buttonText}>view</Text>
         </TouchableOpacity>
                     <View>
  
@@ -207,4 +210,4 @@ borderWidth: 1,
         },
 });
 
-export default ReaderHome
+export default ReaderPaidHome

@@ -77,10 +77,12 @@ const WriterDrawer =  () => {
 const[username,SetUserName]=useState('')
 const[balance,SetBalance]=useState('')
 const[image,SetImage]= useState('')
+const[un,SetUn]=useState(`${global.Wname}`)
+  const[up,SetUP]=useState(`${global.Wpassword}`)
 
   const login = async () => {
     try {
-      const response = await fetch(global.Url + `/api/User/Login?email=Writer0@gmail.com&password=12345`);
+      const response = await fetch(global.Url + `/api/User/Login?email=${un}&password=${up}`);
       const data = await response.json();
       console.log('Login data:', data);
       if(data!='Invalid email or password'){

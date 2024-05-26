@@ -4,7 +4,7 @@ import {WebView} from 'react-native-webview';
 import RenderHTML from 'react-native-render-html';
 import { AirbnbRating } from 'react-native-ratings';
 
-const ReaderShowFreeMovie = ({route}) => {
+const ReaderShowPaidMovie = ({route}) => {
     const [visible,SetVisible]=useState(false)
     const [summary,SetSummary] = useState('Summary DAta')
     const [urls, setUrls] = useState([
@@ -43,19 +43,19 @@ const ReaderShowFreeMovie = ({route}) => {
   
       return parsedUrls;
     };
-  const[s,SetS]=useState('')
+  const[s,SetS]=useState('1728526576')
     useEffect(()=>{
   
       console.log('I am urlseeeeeee',urls);
       console.log('I ma  cuurreeentIndexxxx',currentUrlIndex)
       console.log('I am summary',summary)
+      console.log('ia ma s',s)
 //   showFreeMovie()
     },[urls,currentUrlIndex,summary]);
     const showFreeMovie = async () => {
         try {
-            let se = route.params;
-            SetS(se)
-            console.log('ssssssssssssssss',se)
+           
+            // console.log('ssssssssssssssss',se)
           
           const response = await fetch(global.Url + `/api/editor/ViewSentProject?Movie_ID=${s}`);
           const data = await response.json();
@@ -88,8 +88,10 @@ console.log('i ma current index',currentUrlIndex)
       };
 
       useEffect(()=>{
+        const { Movie_ID } = route.params ;
+        console.log('movie id',Movie_ID)
         showFreeMovie()
-      },[s])
+      },[s,Movie_ID])
 
   return (
     <View style={styles.container}>
@@ -168,4 +170,4 @@ const styles = StyleSheet.create({
   });
   
 
-export default ReaderShowFreeMovie
+export default ReaderShowPaidMovie

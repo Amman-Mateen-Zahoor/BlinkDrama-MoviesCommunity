@@ -214,7 +214,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Button,KeyboardAvoidingView ,Image,Modal,Pressable,TextInput } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
-import { UserCircleIcon, ArrowRightIcon,BellIcon } from 'react-native-heroicons/outline';
+import { UserCircleIcon, ArrowRightIcon,BellIcon, ArrowLeftIcon } from 'react-native-heroicons/outline';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import EditoNotif from './EditorNotifications'
 import { launchImageLibrary } from 'react-native-image-picker';
@@ -235,6 +235,7 @@ const EditorSendProposal = ({navigation,route}) => {
   const [movies, setMovies] = useState([]);
   const [refreshComponent, setRefreshComponent] = useState(false);
   const[writerId,SetWId]=useState('');
+  const[episode,SetEpisode]=useState(0);
   const [image,SetImage]= 
   useState
   ('')
@@ -290,8 +291,8 @@ const EditorSendProposal = ({navigation,route}) => {
       const formData = new FormData();
       formData.append('Image', image);
       const response = await fetch(
-        `${global.Url}/api/Editor/perpossal?MoviName=${encodedMovieName}&type=Movie&movieId=${encodedMovieId}
-        &director=${encodedDirector}&editorId=1&DueDate=${formattedDate}&status=sent&WriterId=${encodedWriter}&imagePath=${image}&balance=${balance}`
+        `${global.Url}/api/Editor/perpossal?MoviName=${encodedMovieName}&type=${type}&movieId=${encodedMovieId}
+       &genre=${genre} &director=${encodedDirector}&episode=${episode}&editorId=1&DueDate=${formattedDate}&status=sent&WriterId=${encodedWriter}&imagePath=${image}&balance=${balance}`
         // {
         //   method: 'POST',
         //   headers: {
@@ -352,7 +353,7 @@ const EditorSendProposal = ({navigation,route}) => {
     setRefreshComponent(true)
     
   };
-
+const[editable,setIsEditable]=useState(false)
 
   
 
@@ -449,9 +450,16 @@ const EditorSendProposal = ({navigation,route}) => {
           setDirector(data[0].Director);
           setCategory(data[0].Category);
           SetImage(data[0].Image)
+          SetType(data[0].Type)
+          if(data[0].Type=='Drama'){
+            setIsEditable(true)
+            console.log(editable,'value of editable')
+          }
           console.log('i.m Img',image)
+          console.log('i.m Img',type)
         }}
       />
+
       <View style={styles.signUpContainer}>
         <Text style={styles.dontHaveAccount}>Don't have an Movie?</Text>
         <Pressable onPress={() => SetVisible(true)}>
@@ -464,19 +472,30 @@ const EditorSendProposal = ({navigation,route}) => {
       visible={visible}
       animationType='slide'
       >
-        <View style={{flex:1,backgroundColor:'#2D3748'}}>
-      <Text>ImageEditorSendProposal.</Text>
+    
+        <View style={styles.container}>
+      <View style={{flexDirection:'row'}}>
+        <TouchableOpacity onPress={()=>SetVisible(false)}>
+      <ArrowLeftIcon size={30} color='yellow' / > 
+      </TouchableOpacity>
+      <Text style={{
+        fontSize: 18,
+        marginBottom: 20,
+        marginTop:30,
+        color: 'yellow', // Dark gray color
+    }}>                    Add Movie/Drama</Text>
+      </View>
       <View>
         {/* <TextInput placeholder='MovieId'
         onChangeText={SetMovieId}></TextInput> */}
         <TextInput placeholder='Movie_Name'
-        onChangeText={SetMovieName}></TextInput>
+        onChangeText={SetMovieName} style={styles.inputContainer}></TextInput>
         <TextInput placeholder='Genre'
-        onChangeText={SetGenre}></TextInput>
+        onChangeText={SetGenre} style={styles.inputContainer}></TextInput>
         <TextInput placeholder='Type'
-        onChangeText={SetType}></TextInput>
+        onChangeText={SetType} style={styles.inputContainer}></TextInput>
         <TextInput placeholder='Director'
-        onChangeText={setDirector}></TextInput>
+        onChangeText={setDirector} style={styles.inputContainer}></TextInput>
         {/* <TextInput placeholder='Due_Date'
         onChangeText={SetDueDate}></TextInput> */}
         <View>
@@ -490,17 +509,17 @@ const EditorSendProposal = ({navigation,route}) => {
             borderRadius: 20,
             borderWidth: 2,
           }}>
-          <Text style={{fontSize: 20, color: 'white'}}>library</Text>
+          <Text style={{fontSize: 20, color: 'white'}}>Image</Text>
         </TouchableOpacity>
         <Image
           source={{uri: imageData.uri}}
           style={{height: 100, width: 100, borderWidth: 2}}></Image>
       </View>
       </View>
-      <View><TouchableOpacity onPress={()=>{
+      <View style={styles.buttonContainer}><TouchableOpacity style={styles.button} onPress={()=>{
         Send()
       }}>
-        <Text style={{color:'blue', fontSize:21}}> Send</Text>
+        <Text style={styles.buttonText}> Send</Text>
         </TouchableOpacity></View>
     </View>
         </Modal>
@@ -516,6 +535,10 @@ const EditorSendProposal = ({navigation,route}) => {
         <TouchableOpacity onPress={() => {}}>
           <UserCircleIcon size={24} color='white' />
         </TouchableOpacity>
+      </View>
+      <View style={styles.inputContainer}>
+        <Text>Type: {type}</Text>
+       
       </View>
       </View>
 
@@ -535,12 +558,6 @@ const EditorSendProposal = ({navigation,route}) => {
       <View>
         <Text>Genre : {category}</Text>
       </View>
-
-<View style={styles.inputContainer}>
-<TextInput placeholder='Enter Balance'
-onChangeText={SetBalance}
-></TextInput>
-</View>
       <SelectList placeholder='Select Writer' data={selectedWriters} setSelected={(e)=>{
         const data=selectedWriters.filter((a)=>a.key===e);
         setSelectedWriters(data)
@@ -549,6 +566,18 @@ onChangeText={SetBalance}
       }
         
         />
+
+<View style={styles.inputContainer}>
+<TextInput placeholder='Enter Balance'
+onChangeText={SetBalance}
+></TextInput>
+</View>
+<View style={styles.inputContainer}>
+<TextInput editable={editable} placeholder='Enter Episode enable  when type is drama'
+onChangeText={SetEpisode}
+></TextInput>
+</View>
+   
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={sendData}>
@@ -567,7 +596,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#1A202C',
     flex: 1,
-    padding: 20,
+    padding: 18,
   },
   image: {
     width: 80,
@@ -581,12 +610,12 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   heading: {
-    marginTop: 20,
+    
     alignSelf: 'center',
     color: 'yellow',
     fontSize: 30,
     textDecorationLine: 'underline',
-    marginBottom: 30,
+    marginBottom: 15,
   },
   inputContainer: {
     

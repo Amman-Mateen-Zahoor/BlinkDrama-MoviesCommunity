@@ -10,14 +10,16 @@ const WriterMainScreen = ({route,navigation}) => {
 const[id1,SetId1]=useState('');
   const { writerId } = route.params || {};
 const data =route.params
+
 console.log(writerId)
 console.log(data)
 
 const [SentPropossal,setSentPropossal]=useState([])
 const [rewriteProposal,SetRewriteProposal]=useState([])
 const [reloadFlag, setReloadFlag] = useState(false);
+const[gId,SetGId]=useState(`${global.wId}`)
 const RewriteProject=async()=>{
-  const responce= await fetch(global.Url + `/api/Writer/ViewRewriteProject?Writer_ID=${writerId}`)
+  const responce= await fetch(global.Url + `/api/Writer/ViewRewriteProject?Writer_ID=${gId}`)
   const data= await responce.json()
   console.log('i am data From REwrite api',data)
   const filteredData = data;
@@ -32,7 +34,7 @@ const RewriteProject=async()=>{
 
   useEffect(()=>{
     const login=async()=>{
-      const responce= await fetch(global.Url + `/api/Writer/ShowProposals?Writer_ID=${writerId}`)
+      const responce= await fetch(global.Url + `/api/Writer/ShowProposals?Writer_ID=${gId}`)
       const data= await responce.json()
       console.log('i am from 2nd console',data)
       const maparray =data.map(obj=>obj.Image)
@@ -42,6 +44,12 @@ const RewriteProject=async()=>{
     }
     login()
     RewriteProject()
+    const b = `${global.wId}`
+console.log('plzzzzzzzzzzzzzzzzzzzzzzzzzz heeeeeeeeeeeeeeeeeeeeeeelllllllllllllpppppp',b)
+SetGId(b)
+if(b!=null){
+console.log('i am gid',gId)}
+
   },[reloadFlag])
   // const AcceptedStatus=async(a)=>{
 

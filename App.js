@@ -31,6 +31,12 @@ import ShowCommnent from './Screens/ShowCommnent';
 import EditorAllHistory from './Screens/EditorAllHistory';
 import ReaderShowFreeMovie from './Screens/ReaderShowFreeMovie';
 import ReaderHome from './Screens/ReaderHome';
+import ReaderDrawer from './Screens/ReaderDrawer';
+import ReaderSeeAllBtn from './Screens/ReaderSeeAllBtn';
+import ReaderPaidHome from './Screens/ReaderPaidHome';
+import ReaderSeeAllBtnPaid from './Screens/ReaderSeeAllBtnPaid';
+import ReaderDrawerPaid from './Screens/ReaderDrwerPaid';
+import ReaderShowPaidMovie from './Screens/ReaderShowPaidMovie';
 
 
 
@@ -39,13 +45,15 @@ const Tab = createBottomTabNavigator();
 // const Tab = createMaterialTopTabNavigator();
 const DataContext = createContext();
 
-global.Url = 'http://192.168.2.124/BlinkBackend';
+global.Url = 'http://192.168.204.124/BlinkBackend';
+
+
 
 function AppStack() {
-  const [sharedData, setSharedData] = useState(null);
+  
   return (
     
-    <Stack.Navigator initialRouteName='ReaderShowFree'>
+    <Stack.Navigator initialRouteName='login'>
       <Stack.Screen name="Login" options={{ headerShown: false }} component={Login} />
       <Stack.Screen name="Signup" options={{ headerShown: false }} component={Signup} />
       <Stack.Screen name="SignupToLogin" options={{ headerShown: false }} component={Login} />
@@ -67,7 +75,13 @@ function AppStack() {
       <Stack.Screen name='initial' options={{headerShown:false}} component={AppTab}/>
       <Stack.Screen name='ReaderShowFree' options={{headerShown:false}} component={ReaderHome}/>
       <Stack.Screen name = 'readerfreeshow' options={{headerShown:false}} component={ReaderShowFreeMovie}/>
-    
+      <Stack.Screen name='ReadersTab' options={{headerShown:false}} component={ReaderAppTab}/>
+    <Stack.Screen name='Seeallbtn' options={{headerShown:false}} component={ReaderSeeAllBtn}/>
+    <Stack.Screen name='Seeallbtnpaid' options={{headerShown:false}} component={ReaderSeeAllBtnPaid}/>
+    <Stack.Screen name='paidhome' options={{headerShown:false}} component={ReaderPaidHome}/>
+    <Stack.Screen name ='paidtab' options={{headerShown:false}} component={ReaderPaidAppTab}/>
+
+    <Stack.Screen name='paidShowMovie' options={{headerShown:false}} component={ReaderShowPaidMovie}/>
     </Stack.Navigator>
    
     
@@ -95,12 +109,14 @@ function AppTab() {
       tabBarStyle:{backgroundColor:'coral'}
     }}
     >
-      <Tab.Screen name='Home1' options={{
+      <Tab.Screen name='Home1'
+       options={{
 
        tabBarIcon:({color , size})=>
        (<Ionicons name="home" size={30} color="#900" />),
        
-      }} component={Login}/>
+      }} 
+      component={Login}/>
       <Tab.Screen name='Home2'
       options={{
         tabBarIcon:({color , size})=>(
@@ -170,6 +186,98 @@ function AppTab2() {
 }
 
 
+function ReaderAppTab() {
+  return (
+    <Tab.Navigator 
+    screenOptions={{
+      tabBarActiveTintColor:'yellow',
+      tabBarInactiveTintColor:'blue',
+      tabBarShowLabel:false,
+      headerShown:false,
+      headerPressColor:'yellow',
+      tabBarStyle:{backgroundColor:'coral'}
+    }}
+    >
+      <Tab.Screen name='ReaderHome1'
+       options={{
+
+       tabBarIcon:({color , size})=>
+       (<Ionicons name="home" size={30} color="#900" />),
+       
+      }} 
+      component={ReaderHome}/>
+      <Tab.Screen name='Home2'
+      options={{
+        tabBarIcon:({color , size})=>(
+        <Fontisto name="person" size={30} color="#900" />)
+       }}
+      component={ReaderDrawer}/>  
+      <Tab.Screen name='house6' 
+      options={{
+        tabBarIcon:({color , size})=>
+        <Ionicons name="receipt" size={30} color="#900" />
+       }}
+      component={newAcceptWriter}/>
+      <Tab.Screen name='WriterNotif' 
+      options={{
+        tabBarIcon:({color , size})=>(
+        <Ionicons name="notifications" size={30} color="#900" />),
+        tabBarBadge:3,
+        tabBarBadgeStyle: {backgroundColor:'yellow'}
+       }}
+       
+      component={WriterNotifications}/>
+    </Tab.Navigator>
+  );
+}
+
+function ReaderPaidAppTab() {
+  return (
+    <Tab.Navigator 
+    screenOptions={{
+      tabBarActiveTintColor:'yellow',
+      tabBarInactiveTintColor:'blue',
+      tabBarShowLabel:false,
+      headerShown:false,
+      headerPressColor:'yellow',
+      tabBarStyle:{backgroundColor:'coral'}
+    }}
+    >
+      <Tab.Screen name='ReaderHome1'
+       options={{
+
+       tabBarIcon:({color , size})=>
+       (<Ionicons name="home" size={30} color="#900" />),
+       
+      }} 
+      component={ReaderPaidHome}/>
+      <Tab.Screen name='Home2'
+      options={{
+        tabBarIcon:({color , size})=>(
+        <Fontisto name="person" size={30} color="#900" />)
+       }}
+      component={ReaderDrawerPaid}/>  
+      <Tab.Screen name='house6' 
+      options={{
+        tabBarIcon:({color , size})=>
+        <Ionicons name="receipt" size={30} color="#900" />
+       }}
+      component={newAcceptWriter}/>
+      <Tab.Screen name='WriterNotif' 
+      options={{
+        tabBarIcon:({color , size})=>(
+        <Ionicons name="notifications" size={30} color="#900" />),
+        tabBarBadge:3,
+        tabBarBadgeStyle: {backgroundColor:'yellow'}
+       }}
+       
+      component={WriterNotifications}/>
+    </Tab.Navigator>
+  );
+}
+
+
+
 
 
 function EditorAppTab() {
@@ -195,12 +303,12 @@ function EditorAppTab() {
        }}
       component={EditorSendProposal}/>
 
-<Tab.Screen name='Home8'
+{/* <Tab.Screen name='Home8'
       options={{
         tabBarIcon:({color , size})=>(
         <Fontisto name="person" size={30} color="#900" />)
        }}
-      component={WriterDrawer}/>
+      component={WriterDrawer}/> */}
 
       <Tab.Screen name='Home4'
        options={{
@@ -226,6 +334,8 @@ function EditorAppTab() {
 }
 
 function App() {
+  
+  
   return (
     <NavigationContainer>
       <AppStack />

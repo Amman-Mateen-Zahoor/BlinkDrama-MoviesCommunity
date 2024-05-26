@@ -9,6 +9,10 @@ export default function Login({navigation}) {
   const [email,setEmail]=useState('')
   const [password,setPassword]=useState('')
   const [id,SetId]= useState('')
+  const[name,SetName]=useState()
+  const[upassword,SetUPassword]=useState()
+  
+
   // const saveLoginInfo = async (Id) => {
   //   try {
   //     await AsyncStorage.setItem('Id', id);
@@ -72,8 +76,20 @@ const login = async () => {
       const writerId = data.UserData.Writer_ID;
       console.log('Writer ID:', writerId);
       SetId(writerId)
-      
-      navigation.navigate('WriterMainScreen',  {writerId} );
+      global.wId=writerId
+      console.log(`${global.wId}`,'oioioioi')
+
+      const user= data.UserData.Email
+      console.log('user',user)
+      global.Wname=user
+      console.log(`${global.Wname}`,'WNAMEEEEEEEEEEEee')
+
+      const password= data.UserData.Password
+      console.log('user',password)
+      global.Wpassword=password
+      console.log(`${global.Wpassword}`,'WNAMEEEEEEEEEEEeepasssss')
+
+      navigation.navigate('Home2',  {writerId} );
     }
     
     
@@ -82,7 +98,14 @@ const login = async () => {
     } 
     
     else if (data.Role === 'Reader') {
-      navigation.navigate('EditorMainScreen', data);
+      console.log('baaaalllaaannncceee',data.UserData[0].Balance)
+      if(data.UserData[0].Balance==0){
+      navigation.navigate('ReadersTab', data);
+    }
+    else
+    {
+      navigation.navigate('paidtab', data);
+    }
     }
     else {
       console.log('Invalid role:', data.Role);
@@ -118,7 +141,7 @@ const login = async () => {
             </Text>
         </Text>
       </TouchableOpacity>
-     <View><Text>aaa</Text>
+     <View>
      {/* <Image source={{ uri: `${global.Url} + "/Images/" + ${uData.UserData.Image} `}} style={{
     width: 107,
     height: 165,

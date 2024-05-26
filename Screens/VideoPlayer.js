@@ -1,5 +1,5 @@
 import React, { useState ,useEffect } from 'react';
-import { View, StyleSheet, Text, Dimensions, Platform, Touchable, TouchableOpacity, Alert } from 'react-native';
+import { View, StyleSheet, Text, Dimensions, Platform, Touchable, TouchableOpacity, Alert, Modal, TextInput } from 'react-native';
 import { WebView } from 'react-native-webview';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import navigation from '../Navigation/Navigation';
@@ -7,11 +7,18 @@ import navigation from '../Navigation/Navigation';
 //const TestScreen = () => {
 const VideoPlayer = ({ route , navigation }) => {
   // const { videoId } = route.params;
+  const[title1,SetTitle1]=useState('i am title')
+  const[visible,SetVisible]=useState(false)
   const dataa = route.params;
-  // im last comment console.log('i am player data',dataa)
+  const[datavideoid,SetDataVideoId]=useState(dataa.videoId)
+  // this is last comment console.log('i am player data',dataa)
   const [totalDuration, setTotalDuration] = useState(1);
   const [sliderValues, setSliderValues] = useState([0, 1]);
-  const [videoUrl, setVideoUrl] = useState('https://www.youtube.com/embed/${dataa.videoId}?start=0&end=65');
+  const [videoUrl, setVideoUrl] = useState('https://www.youtube.com/embed/${dataa.videoId}?start=0&end=65&autoplay=1');
+  const [videoUrl2, setVideoUrl2] = useState();
+  const[sendId,SetSendId]=useState(dataa.videoId)
+  const[start,SetStart]=useState()
+  const[end,SetEnd]=useState()
 const [compoundUrl, SetCopoundUrl]=useState([])
 const[test,SetTest]=useState('&autoplay=1')
 useEffect(()=>{},[videoUrl])
@@ -22,7 +29,8 @@ useEffect(() => {
     setSliderValues(values);
     const start = values[0];
     const end = values[1];
-    setVideoUrl(`https://www.youtube.com/embed/${dataa.videoId}?start=${start}&end=${end}`);
+    setVideoUrl(`https://www.youtube.com/embed/${dataa.videoId}?start=${start}&end=${end}&autoplay=1`);
+    setVideoUrl2(`VideeoId=${datavideoid}?start=${start}&end=${end}`);
   };
 
   const handleSliderComplete = () => {
@@ -49,7 +57,10 @@ useEffect(() => {
     setSliderValues(values);
     const start = values[0];
     const end = values[1];
-    const newUrl = `https://www.youtube.com/embed/${dataa.videoId}?start=${start}&end=${end}`;
+    SetStart(start)
+    SetEnd(end)
+    
+    const newUrl = `https://www.youtube.com/embed/${dataa.videoId}?start=${start}&end=${end}&autoplay=1`;
     const newObject = { videoUrl: newUrl, /*, other properties if any */ };
     setVideoUrl(newUrl);
     // thissss wassss comment coz it showssss consoleee console.log('immm',videoUrl)
@@ -103,16 +114,30 @@ useEffect(() => {
         <View style={{paddingTop:10,flexDirection:'row'}}>
         <View style={{alignSelf:'flex-start'}}>
           {/* <TouchableOpacity style={styles.button} onPress={()=>console.warn(videoUrl)}> */}
-          <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('ShowWriterClips',videoUrl)}>
+          {/* This is is last but not working<TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('ShowWriterClips',videoUrl)}> */}
           {/* <TouchableOpacity style={styles.button} onPress={()=>MakeClip}> */}
           {/* <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('clip', { videoUrl: videoUrl , isCompoundClip:false })}> */}
-
+          <TouchableOpacity style={styles.button} onPress={()=>SetVisible(true)}>
          <Text style={styles.buttonText}>MakeClip</Text>
         </TouchableOpacity></View>
+<Modal
+transparent={false}
+visible={visible}
+animationType='slide'
 
+>
+<View style={{flex: 1, backgroundColor: '#000000'}}>
+  <TouchableOpacity onPress={()=>SetVisible(false)}>
+  
+  <TextInput placeholder='Enter Title'
+  onChangeText={SetTitle1}
+  ></TextInput>
+  <Text>Add</Text></TouchableOpacity>
+  </View>
+  </Modal>
         <View style={{alignSelf:'flex-start',paddingLeft:4,paddingEnd:5}}>
           <TouchableOpacity style={styles.button}
-          onPress={()=>{SetCopoundUrl(prevCompoundUrl => [...prevCompoundUrl,{clip:videoUrl , isCompoundClip:true}]);
+          onPress={()=>{SetCopoundUrl(prevCompoundUrl => [...prevCompoundUrl,{clip:sendId , isCompoundClip:true ,Title:title1,Start_time:start,End_time:end }]);
             }}>
          <Text style={styles.buttonText}>Add to comp</Text>
         </TouchableOpacity></View>
@@ -121,7 +146,7 @@ useEffect(() => {
         </View>
         <View style={{alignSelf:'flex-start',paddingLeft:4,paddingEnd:5}}>
           <TouchableOpacity style={styles.button}
-         onPress={()=>navigation.navigate('ShowWriterClips',{compound : compoundUrl, data1: dataa})}>
+         onPress={()=>navigation.navigate('ShowWriterClips',{compound : compoundUrl, data1: dataa , videoId:dataa.videoId})}>
          <Text style={styles.buttonText}>show clips</Text>
         </TouchableOpacity></View>
       </View>
