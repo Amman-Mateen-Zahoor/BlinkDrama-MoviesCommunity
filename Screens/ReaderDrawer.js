@@ -11,7 +11,7 @@ const[image,SetImage]= useState('')
 
   const login = async () => {
     try {
-      const response = await fetch(global.Url + `/api/User/Login?email=Reader1@gmail.com&password=12345`);
+      const response = await fetch(global.Url + `/api/User/Login?email=Abdullah@gmail.com&password=12345`);
       const data = await response.json();
       console.log('Login data:', data);
       if(data!='Invalid email or password'){
@@ -48,10 +48,10 @@ useEffect(
           </View>
           <View style={{paddingLeft:20}}>
             <Text style={{fontSize:18,fontWeight:'bold',}}>
-            Name: {username}
+            Name: Abdullah
             </Text>
             <Text style={{fontSize:18,fontWeight:'bold',}}>
-            Balance : {balance}
+            Balance : Free
             </Text>
            
             <View >

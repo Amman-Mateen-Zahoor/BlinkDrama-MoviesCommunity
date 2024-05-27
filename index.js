@@ -35,4 +35,4 @@ import ReaderSeeAllBtn from './Screens/ReaderSeeAllBtn';
 import TestMultipleVideos from './Screens/TestMultipleVideos';
 import CcheckIFrame from './Screens/CcheckIFrame'
 
-AppRegistry.registerComponent(appName, () =>TestScreen);
+AppRegistry.registerComponent(appName, () =>App);

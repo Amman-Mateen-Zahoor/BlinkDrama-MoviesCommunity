@@ -29,7 +29,7 @@ const ReaderHome = ({navigation}) => {
   };
     const login = async () => {
         try {
-          const response = await fetch(global.Url + `/api/Reader/IssueFreeMovie?readerId=1560688237`);
+          const response = await fetch(global.Url + `/api/Reader/IssueFreeMovie?readerId=7`);
           const data = await response.json();
           console.log('Login data:', data);
           if(data!=null){

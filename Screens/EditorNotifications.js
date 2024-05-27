@@ -26,9 +26,17 @@ useEffect(()=>{
 
 
   return (
-    // <View><Text>sss</Text></View>
-
+   
+<View style={styles.container}>
+<Text style={{
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 20,
+        textAlign: 'center',
+        color: '#FFFFFF', // White color
+    }}> Send Projects By Writers </Text>
 <ScrollView contentContainerStyle={styles.container}>
+  
       {/* Render dynamic project views */}
       {projectData.map((project,index) => 
       <View key={project.SentProposal_ID} style={styles.projectContainer}>
@@ -47,7 +55,7 @@ useEffect(()=>{
     
     )}
     </ScrollView>
-
+    </View>
   );
 };
 

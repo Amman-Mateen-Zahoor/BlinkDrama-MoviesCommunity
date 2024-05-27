@@ -1,15 +1,17 @@
-import React, {useState, useEffect,useRef} from 'react';
-import {View, Dimensions,Modal, Alert,StyleSheet,TextInput, Button, useWindowDimensions, TouchableOpacity, ScrollView} from 'react-native';
-import { Text } from 'react-native-svg';
+import React, {useState, useCallback,useRef,useEffect} from 'react';
+import {View, Dimensions,Modal,Text, Alert,StyleSheet,TextInput, Button, useWindowDimensions, TouchableOpacity, ScrollView} from 'react-native';
+
 import {WebView} from 'react-native-webview';
 import RenderHTML from 'react-native-render-html';
-import { RichEditor, RichToolbar } from 'react-native-pell-rich-editor';
+import {  RichToolbar,RichEditor } from 'react-native-pell-rich-editor';
 import { ArrowDownCircleIcon, ArrowLeftIcon } from 'react-native-heroicons/outline';
-
+import YoutubePlayer from "react-native-youtube-iframe";
 
 const EditorShowView = ({route}) => {
   const [visible,SetVisible]=useState(false)
   const [visi2,SetVisi2]=useState(false)
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [playing, setPlaying] = useState(true);
 
   // const [multiurl, setMultiUrl] = useState(`{"ClipsData": 
   // [{"Clips_ID": 793362522, "End_time": null, "Start_time": null, "Title": "Title1", "Url": "https://www.youtube.com/embed/InT99AHc8q4?start=35&end=49", "isCompoundClip": true},
@@ -21,49 +23,49 @@ const[multiurl,setMultiUrl]=useState([])
 
   const richText = useRef();
   const [summary,SetSummary] = useState('Summary DAta')
-  const [urls, setUrls] = useState([
+  const [clips, setClips] = useState([
     // "https://www.youtube.com/embed/VO0D7RpMhCc?start=0&end=20",
     // "https://www.youtube.com/embed/VO0D7RpMhCc?start=220&end=230"
     // Add more URLs as needed
   ]);
+  const videoIds = clips.map(clip => clip.Url);
+  const startTimes = clips.map(clip => clip.Start_time);
+  const endTimes = clips.map(clip => clip.End_time);
 
-  const [currentUrlIndex, setCurrentUrlIndex] = useState(0);
+  console.log('VideoIds:', videoIds);
+  console.log('videoliength',videoIds.length)
+  console.log('StartTimes:', startTimes);
+  console.log('EndTimes:', endTimes);
+  
+useEffect(()=>{
+  console.log('clips of url',clips)
+},[clips])
 
-  // Usage
-
-  const extractParameters = url => {
-    const regex = /[?&](start|end)=([^?&]+)/g;
-    const parameters = {};
-    let match;
-
-    while ((match = regex.exec(url)) !== null) {
-      parameters[match[1]] = parseInt(match[2]);
+  const onStateChange = useCallback((state) => {
+    if (state === "ended") {
+      // setPlaying(true);
+      // Alert.alert("Video has finished playing!");
+      
+        
+      handleVideoChange();
+      
     }
-
-    return parameters;
+  }, [currentIndex,clips]);
+  // Usage
+  const handleVideoChange = () => {
+    if(currentIndex==videoIds.length){
+      setPlaying(false)
+    }
+    else{
+    const nextIndex = (currentIndex + 1) % videoIds.length;
+    console.log('inside length',videoIds.length)
+    setCurrentIndex(nextIndex);
+    console.log('Next indexxx',nextIndex)
+    console.log('currenttttt inside',currentIndex)
+    console.log('vid of current index ',videoIds[currentIndex])
+  }
   };
-
-  const parseYouTubeUrls = urls => {
-    const parsedUrls = urls.map(url => {
-      const parameters = extractParameters(url);
-      return {
-        url: url,
-        start: parameters.start || 0,
-        end: parameters.end || null,
-      };
-    });
-
-    return parsedUrls;
-  };
-
-
-  useEffect(()=>{
-
-    console.log('I am urlseeeeeee',urls);
-    console.log('I ma  cuurreeentIndexxxx',currentUrlIndex)
-    console.log('I am summary',summary)
-
-  },[urls,currentUrlIndex,summary,multiurl]);
+  
 const[sproId,SetsproId]=useState('')
 
 
@@ -89,33 +91,14 @@ SetsproId(a)
         const urlse2 = data.ClipsData
 
         console.log('urlse2>>>>>>>>>>>>>>>>>>',urlse2)
-        setMultiUrl(urlse2)
-        setUrls(urlse)
+        setMultiUrl(urlse)
+        setClips(urlse2)
+        SetData(urlse2)
        
         // const urlse = data.ClipsData
 
         // Do something with the URLs, such as logging them
-        console.log('I am urlseeeeeee',urlse);
-        const value = parseYouTubeUrls(urlse);
-        console.log('I am value',value)
-        const currentVideo = value[currentUrlIndex]
-        console.log("this is currentVedio",currentVideo)
-        
-          const videoDuration = (currentVideo.end - currentVideo.start) * 1000;
-    console.log('I am Video duration',videoDuration)
-        
-        
-        const timer = setTimeout(() => {
-          setCurrentUrlIndex(prevIndex => (prevIndex + 1));
-        }, videoDuration); // Adjust this delay as needed, currently set to 10 seconds
-    console.log('i am testerrrrrr',urls[currentUrlIndex])
-    console.log('i ma current index',currentUrlIndex)
-        return () => clearTimeout(timer);
-    
-    
-    
- 
-       
+        console.log('I am urlseeeeeee',clips); 
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -123,7 +106,7 @@ SetsproId(a)
     ViewData();
 
     
-  }, []);
+  }, [data]);
 
   const source = {
     html: `
@@ -131,6 +114,47 @@ SetsproId(a)
     ${summary}
 `
   };
+
+  const YouTubePlayer = ({ End_time, Start_time, Title, Url, Clips_ID }) => {
+    const [playing, setPlaying] = useState(false);
+  
+    const onStateChange = (state) => {
+      if (state === 'ended') {
+        setPlaying(false);
+      }
+    };
+  
+    return (
+      <View key={Clips_ID} style={{ marginBottom: 20 }}>
+        <Text>{Title}</Text>
+        <YoutubePlayer
+          height={300}
+          play={playing}
+          videoId={Url}
+          onChangeState={onStateChange}
+          initialPlayerParams={{
+            start: Start_time,
+            end: End_time,
+          }}
+        />
+      </View>
+    );
+  };
+  
+  const [data,SetData] = useState([
+    // { End_time: 5, Start_time: 0, Title: "I am title", clip: "S7KS4i0_KFE", id: 1 },
+    // { End_time: 5, Start_time: 0, Title: "I am title", clip: 'KILUsa4crzI', id: 2 },
+    // { End_time: 20, Start_time: 15, Title: "I am title", clip: 'KILUsa4crzI', id: 3 },
+    // { End_time: 20, Start_time: 10, Title: "I am title", clip: "S7KS4i0_KFE", id: 4 }
+  ])
+ 
+
+
+
+
+
+
+
 
   const Accept = async () => {
     try {
@@ -210,12 +234,24 @@ SetsproId(a)
 
 
 
+
+  
+
+
   const { width } = useWindowDimensions();  
 
   return (
     <View style={styles.container}>
+      <ScrollView>
+     <Text style={{
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 20,
+        textAlign: 'center',
+        color: '#FFFFFF', // White color
+    }}>     Summary </Text>
+      
      
-
 {/* <View><TextInput placeholder={summary}
        multiline={true} 
        style={styles.input1} 
@@ -230,93 +266,139 @@ SetsproId(a)
       {summary ? <RenderHTML contentWidth={width} 
       style={{Color:'blue'}}
       source={source} /> : console.log(summary)}
+      
       </Text>
-      <Button title='Show Single Clips' onPress={()=>{SetVisi2(true)}}></Button>
-      
-      <Modal
-      transparent={false}
-      visible={visible}
-      animationType='slide'
-      >
-        
-        <View style={{backgroundColor:'#2D3748', flex:1}}><Text>Modal</Text>
-        <RichEditor
-        ref={richText}
-        placeholder="Start typing..."
-        onChange={SetSummary}
-         // Use onChange instead of onTextChange
-      />
-
-
-      {/* Toolbar for formatting options */}
-      <RichToolbar
-        getEditor={() => richText.current}
-      />
-      <Button title='Rewrite' onPress={Rewrite}></Button>
-      </View></Modal>
-      <WebView
-        javaScriptEnabled={true}
-        domStorageEnabled={true}
-        source={{uri:urls[currentUrlIndex]}}
-        style={{flex:0.5}}
-      />
-      
-      
-     <Modal
-     transparent={false}
-     visible={visi2}
-     animationType='slide'
-     >
-      <View style={{
-        flexGrow: 1,
-        backgroundColor: '#1A202C',
-        paddingVertical: 40,
-        paddingHorizontal: 10,
-    }}>
-      <View>
-        <TouchableOpacity onPress={()=>SetVisi2(false)}>
-      <ArrowLeftIcon size={30} color='yellow' / > 
-      </TouchableOpacity></View>
-<View style={{ flex: 1,   paddingVertical: 20,
-        paddingHorizontal: 10 }}>
+      <View style={{paddingBottom:5}}></View>
+      <Button title='Rewrite' onPress={()=>SetVisible(true)} ></Button>
             <Text style={{
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 20,
         textAlign: 'center',
         color: '#FFFFFF', // White color
-    }}> Descriptions</Text>
-        <ScrollView>
-          
-      {multiurl.map((clip, index) => (
+    }}>         Compound Clip </Text>
+      
+      <Modal
+transparent={false}
+visible={visi2}
+animationType='slide'
+>
+  <View style={styles.container2}>
+    <View style={{flexDirection:'row'}}>
+<TouchableOpacity onPress={()=>SetVisi2(false)}>
+      <ArrowLeftIcon size={30} color='yellow' / > 
+      </TouchableOpacity>
+      <Text style={{
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 20,
+        textAlign: 'center',
+        color: '#FFFFFF', // White color
+    }}>            Simple Clips </Text>
+      </View>
+      <View style={{paddingBottom:20}}></View>
+      <View>
+<ScrollView >
+      {data.map(item => (
         
-        <View key={index} 
-        style={{ 
-          width: "100%", height: 200, borderWidth: 1,
-        borderColor: '#cccccc',
-        borderRadius: 10,
-        padding: 20,
-        marginBottom: 50 }}>
-
-
-          <WebView
-            javaScriptEnabled={true}
-            domStorageEnabled={true}
-            source={{ uri: clip.Url }}
-          />
-     {/* <Button title='clip.Title' onPress={Accept} ></Button>      */}
-<Text style={{color:'#fff'}}>{clip.Title}</Text>  
-<Button title={clip.Title} color='black' ></Button>       
-         
-        </View>
+        <YouTubePlayer
+          key={item.Clips_ID}
+          End_time={item.End_time}
+          Start_time={item.Start_time}
+          Title={item.Title}
+          Url={item.Url}
+          
+        />
       ))}
-      </ScrollView>
+    </ScrollView>
     </View>
     </View>
+
 </Modal>
+
+
+
+
+      <Modal
+      transparent={false}
+      visible={visible}
+      animationType='slide'
+      >
+        
+        {/* <View style={{backgroundColor:'#2D3748', flex:1}}><Text style={{
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 20,
+        textAlign: 'center',
+        color: '#FFFFFF', // White color
+    }}>  Add Comment </Text>
+        {/* <RichEditor
+        ref={richText}
+        placeholder="Start typing..."
+        onChange={SetSummary}
+         // Use onChange instead of onTextChange
+      />
+       */}
+
+
+      {/* Toolbar for formatting options */}
      
+      {/* <Button title='Rewrite' onPress={Rewrite}></Button>
+          <RichEditor
+        ref={richText}
+        placeholder="Start typing..."
+        onChange={SetSummary}
+         // Use onChange instead of onTextChange
+      />
+      <RichToolbar
+        getEditor={() => richText.current}
+      />
+      
+      </View> */} 
+      <View style={styles.container2}>
+<Text style={{
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 20,
+        textAlign: 'center',
+        color: '#FFFFFF', // White color
+    }}>Add Comment </Text>
+  {/* <RichEditor
+    ref={richText}
+    placeholder="Start typing..."
+    onChange={SetSummary} // Use onChange instead of onTextChange
+  /> */}
+  <TextInput placeholder='Enter Comment' 
+  ref={richText}
+  onChange={SetSummary}
+  ></TextInput>
+   {/* <RichToolbar
+        getEditor={() => richText.current}
+      />*/}
+      <Button title='Rewrite' onPress={Rewrite}></Button> 
+</View>
+      </Modal>
+
+      
+      
+    
+{clips.length > 0 && (
+<YoutubePlayer
+        key={clips[currentIndex].Clips_ID}
+        height={300}
+        play={playing}
+        videoId={clips[currentIndex].Url}
+        initialPlayerParams={{
+          start: clips[currentIndex].Start_time,
+          end: clips[currentIndex].End_time,
+        }}
+        onChangeState={onStateChange}
+      />
+    )}
+    <Button title='Show Single Clips' onPress={()=>{SetVisi2(true)}}></Button>
+<View style={{paddingBottom:10}}></View>
      <Button title='Accept' onPress={Accept} ></Button>
-     <Button title='Add Comment' onPress={()=>SetVisible(true)} ></Button>
+     </ScrollView>
     </View>
   );
 };
@@ -354,5 +436,12 @@ const styles = StyleSheet.create({
     fontSize:20,
     
   },
+  container2: {
+    flex: 1,
+    backgroundColor: '#2D3748',
+    paddingHorizontal: 20,
+    paddingTop:20
+
+  }
 });
 

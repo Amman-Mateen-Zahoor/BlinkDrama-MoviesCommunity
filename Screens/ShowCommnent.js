@@ -1,4 +1,4 @@
-import { StyleSheet, Text,  TouchableOpacity, View ,Modal,useWindowDimensions, Alert} from 'react-native'
+import { StyleSheet, Text,  TouchableOpacity, View ,Modal,useWindowDimensions, Alert, ScrollView} from 'react-native'
 import React, { useEffect, useState ,useRef } from 'react'
 import { RichEditor, RichToolbar } from 'react-native-pell-rich-editor';
 import RenderHTML from 'react-native-render-html';
@@ -142,13 +142,13 @@ const [visible,SetVisible]=useState(false)
   return (
     <View style={{backgroundColor:'#2D3748', flex:1}}>
       <Text style={{backgroundColor:'grey'}} >
-  
+  Editor comment : 
   {comment ? <RenderHTML contentWidth={width} 
   style={{Color:'blue'}}
   source={source} /> : console.log(comment)}
   </Text>
       <TouchableOpacity  onPress={() => SetVisible(true)}>
-  <Text style={{color:'green', borderRadius:12, fontSize:30} } >Accept</Text>
+  <Text style={{color:'green', borderRadius:12, fontSize:30} } >Accept to rewrite</Text>
 </TouchableOpacity>
 
 <Modal
@@ -156,7 +156,8 @@ const [visible,SetVisible]=useState(false)
       visible={visible}
       animationType='slide'
       >
-        <View style={{backgroundColor:'#2D3748', flex:1}}><Text>Modal</Text>
+        <ScrollView><View style={{backgroundColor:'#2D3748', flex:1}}>
+         <Text>Rewrite Summary </Text>
         <RichEditor
         ref={richText}
         placeholder="Start typing..."
@@ -175,12 +176,14 @@ const [visible,SetVisible]=useState(false)
           <Text style={styles.buttonText}>Send Project</Text>
         </TouchableOpacity>
         </View>
+        </ScrollView> 
 
       </Modal>
      
 
 
     </View>
+
   )
 }
 

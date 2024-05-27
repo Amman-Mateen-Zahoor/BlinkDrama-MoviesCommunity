@@ -1,16 +1,55 @@
 
 import React, { useState, useEffect, useRef ,useCallback } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, TextInput, Alert ,Button,ScrollView } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text, TextInput, Alert ,Button,ScrollView, Modal } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useNavigation } from '@react-navigation/native';
 import { RichEditor, RichToolbar } from 'react-native-pell-rich-editor';
 import YoutubePlayer from "react-native-youtube-iframe";
+import { ArrowLeftIcon } from 'react-native-heroicons/outline';
  
 const ShowingWritreCliping = ({ route }) => {
  const[clips,SetSentClip]= useState([])
  clips.forEach((clip, index) => {
   clip.id = index; // Add index to the description
 });
+
+const[visible,SetVisible]=useState(false)
+const YouTubePlayer = ({ End_time, Start_time, Title, clip, id }) => {
+  const [playing, setPlaying] = useState(false);
+
+  const onStateChange = (state) => {
+    if (state === 'ended') {
+      setPlaying(false);
+    }
+  };
+
+  return (
+    <View key={id} style={{ marginBottom: 20 }}>
+      <Text>{Title}</Text>
+      <YoutubePlayer
+        height={300}
+        play={playing}
+        videoId={clip}
+        onChangeState={onStateChange}
+        initialPlayerParams={{
+          start: Start_time,
+          end: End_time,
+        }}
+      />
+    </View>
+  );
+};
+
+const [data,SetData] = useState([
+  { End_time: 5, Start_time: 0, Title: "I am title", clip: "S7KS4i0_KFE", id: 1 },
+  { End_time: 5, Start_time: 0, Title: "I am title", clip: 'KILUsa4crzI', id: 2 },
+  { End_time: 20, Start_time: 15, Title: "I am title", clip: 'KILUsa4crzI', id: 3 },
+  { End_time: 20, Start_time: 10, Title: "I am title", clip: "S7KS4i0_KFE", id: 4 }
+])
+
+
+
+
 const[apple,SetApple]=useState()
 const videoIds = clips.map(clip => clip.clip);
   const startTimes = clips.map(clip => clip.Start_time);
@@ -36,13 +75,14 @@ const videoIds = clips.map(clip => clip.clip);
   console.log('imm aple',apple)
   SetApple(apple)
   SetSentClip(data.compound)
+  SetData(data.compound)
   console.log('I am Clipppppp',clips)
 } catch (error){
   console.log(error)
 } 
  }
 ViewData()
-},[clips])
+},[clips,data])
 
 
 useEffect(()=>{
@@ -52,6 +92,7 @@ useEffect(()=>{
   const onStateChange = useCallback((state) => {
     if (state === "ended") {        
       handleVideoChange();
+      console.log(currentIndex,'cccccccc')
       
     }
   }, [currentIndex,clips]);
@@ -62,7 +103,7 @@ useEffect(()=>{
 
 
   const handleVideoChange = () => {
-    if(currentIndex==2){
+    if(currentIndex===videoIds.length){
       setPlaying(false)
     }
     else{
@@ -72,6 +113,7 @@ useEffect(()=>{
     console.log('Next indexxx',nextIndex)
     console.log('currenttttt inside',currentIndex)
     console.log('vid of current index ',videoIds[currentIndex])
+    
   }
   };
  
@@ -116,6 +158,43 @@ const sendproject = async () => {
 
   return (
     <View style={styles.container}>
+<Modal
+transparent={false}
+visible={visible}
+animationType='slide'
+>
+  <View style={styles.container2}>
+    <View style={{flexDirection:'row'}}>
+<TouchableOpacity onPress={()=>SetVisible(false)}>
+      <ArrowLeftIcon size={30} color='yellow' / > 
+      </TouchableOpacity>
+      <Text style={{
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 20,
+        textAlign: 'center',
+        color: '#FFFFFF', // White color
+    }}>            Simple Clips </Text>
+      </View>
+      <View style={{paddingBottom:20}}></View>
+      <View>
+<ScrollView >
+      {data.map(item => (
+        <YouTubePlayer
+          key={item.id}
+          End_time={item.End_time}
+          Start_time={item.Start_time}
+          Title={item.Title}
+          clip={item.clip}
+          id={item.id}
+        />
+      ))}
+    </ScrollView>
+    </View>
+    </View>
+
+</Modal>
+
 <ScrollView>
 
 <Text style={{
@@ -138,13 +217,13 @@ const sendproject = async () => {
             end: clips[currentIndex].End_time,
           }}
           onChangeState={onStateChange}
-        >
+       / >
         
-        </YoutubePlayer>
+        
       )}
 </View >
 <View style={{paddingBottom:10}}>
-    <Button title='show Single Clips'></Button></View>
+    <Button title='show Single Clips' onPress={()=>SetVisible(true)}></Button></View>
 <View>
 <Text style={{
         fontSize: 24,
@@ -183,6 +262,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#2D3748',
     paddingHorizontal: 20,
     paddingTop: 70,
+
+  },
+  container2: {
+    flex: 1,
+    backgroundColor: '#2D3748',
+    paddingHorizontal: 20,
+    paddingTop:20
 
   },
   button: {
