@@ -1,46 +1,83 @@
 
 import React, { useState, useEffect, useRef ,useCallback } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, TextInput, Alert ,Button } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text, TextInput, Alert ,Button,ScrollView } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useNavigation } from '@react-navigation/native';
 import { RichEditor, RichToolbar } from 'react-native-pell-rich-editor';
 import YoutubePlayer from "react-native-youtube-iframe";
  
 const ShowingWritreCliping = ({ route }) => {
- const[sendclip,SetSentClip]= useState([])
- const richText = useRef();
+ const[clips,SetSentClip]= useState([])
+ clips.forEach((clip, index) => {
+  clip.id = index; // Add index to the description
+});
+const[apple,SetApple]=useState()
+const videoIds = clips.map(clip => clip.clip);
+  const startTimes = clips.map(clip => clip.Start_time);
+  const endTimes = clips.map(clip => clip.End_time);
   
-  let data = route.params;
+  console.log('VideoIds:', videoIds);
+  console.log('videoliength',videoIds.length)
+  console.log('StartTimes:', startTimes);
+  console.log('EndTimes:', endTimes);
+ const richText = useRef();
+ const [currentIndex, setCurrentIndex] = useState(0);
+ const playerRef = useRef(null);
+ const [playing, setPlaying] = useState(true);
+ 
+  useEffect(()=>{
+    const ViewData = async () => {
+    try{
+
+    let data = await route.params;
   console.log('i am showwriteer data', data);
   console.log('data of compound clips', data.compound) 
-  // setSentPropossal('i a m compound clip array',data.compound)
   const apple=data.data1.midata
-  // console.log('imm aple',apple)
-  useEffect(()=>{
-    // // const data= route.params.proposal;
-    // const data= route.params;
-    //   console.log('hiiiiii',data)
-      SetSentClip(data.compound)
-    console.log('I am Clipppppp',sendclip)
-   
-  },[sendclip])
-  const [playing, setPlaying] = useState(true);
-  const[VideoId,SetVideoId]=useState('KILUsa4crzI')
+  console.log('imm aple',apple)
+  SetApple(apple)
+  SetSentClip(data.compound)
+  console.log('I am Clipppppp',clips)
+} catch (error){
+  console.log(error)
+} 
+ }
+ViewData()
+},[clips])
 
+
+useEffect(()=>{
+  console.log('clipssss of useeffect',clips)
+},[clips])
+  
   const onStateChange = useCallback((state) => {
-    if (state === "ended") {
-      setPlaying(false);
-      Alert.alert("video has finished playing!");
+    if (state === "ended") {        
+      handleVideoChange();
+      
     }
-  }, []);
+  }, [currentIndex,clips]);
 
   const togglePlaying = useCallback(() => {
     setPlaying((prev) => !prev);
   }, []);
 
+
+  const handleVideoChange = () => {
+    if(currentIndex==2){
+      setPlaying(false)
+    }
+    else{
+    const nextIndex = (currentIndex + 1) % videoIds.length;
+    console.log('inside length',videoIds.length)
+    setCurrentIndex(nextIndex);
+    console.log('Next indexxx',nextIndex)
+    console.log('currenttttt inside',currentIndex)
+    console.log('vid of current index ',videoIds[currentIndex])
+  }
+  };
+ 
+
+
   const navigation = useNavigation();
-  // Update play/pause state based on current index and webview loading
-  const [isPlaying, setIsPlaying] = useState(false);
   const[Summary,setSummary]=useState('') 
 const sendproject = async () => {
   const sendprojectData = {
@@ -48,7 +85,7 @@ const sendproject = async () => {
     Movie_ID: apple.Movie_ID,
     Writer_ID: apple.Writer_ID,
     Summary: Summary,
-    Clips: sendclip
+    Clips: clips
     
   };
 
@@ -79,43 +116,52 @@ const sendproject = async () => {
 
   return (
     <View style={styles.container}>
+<ScrollView>
 
-<View style={{ flex: 0.5 }}>
+<Text style={{
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 20,
+        textAlign: 'center',
+        color: '#FFFFFF', // White color
+    }}>Watch Compound Clip</Text>
+<View style={{flex:0.5}}>
+      
+  {clips.length > 0 && (
+        <YoutubePlayer
+          key={clips[currentIndex].id}
+          height={300}
+          play={playing}
+          videoId={clips[currentIndex].clip}
+          initialPlayerParams={{
+            start: clips[currentIndex].Start_time,
+            end: clips[currentIndex].End_time,
+          }}
+          onChangeState={onStateChange}
+        >
+        
+        </YoutubePlayer>
+      )}
+</View >
+<View style={{paddingBottom:10}}>
+    <Button title='show Single Clips'></Button></View>
+<View>
+<Text style={{
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 20,
+        textAlign: 'center',
+        color: '#FFFFFF', // White color
+    }}>Write Summary </Text>
   <RichEditor
     ref={richText}
     placeholder="Start typing..."
     onChange={setSummary} // Use onChange instead of onTextChange
   />
-</View>
-
-      {/* Toolbar for formatting options */}
-      <RichToolbar
+   <RichToolbar
         getEditor={() => richText.current}
       />
-   {/* <View><TextInput placeholder='Write Summary'
-       multiline={true} 
-       style={styles.input1} 
-       textAlign='center' 
-       placeholderTextColor='yellow'
-       onChangeText={setSummary}
-></TextInput></View> */}
-
-<YoutubePlayer
-  height={300}
-  play={playing}
-  videoId={VideoId}
-  initialPlayerParams={{
-    start: '02',
-    end: '04',
-  }}
-  onChangeState={(event) => {
-    if (event === 'ended') {
-      
-      SetVideoId('iee2TATGMyI')
-    }
-  }}
-/>
-
+</View>
 
       <View style={{ alignSelf: 'flex-start', paddingLeft: 4, paddingEnd: 5 ,marginTop:20,alignSelf:'center'}}>    
         <TouchableOpacity style={styles.button} onPress={sendproject}> 
@@ -123,6 +169,7 @@ const sendproject = async () => {
           <Text style={styles.buttonText}>Send Project</Text>
         </TouchableOpacity>
       </View>
+      </ScrollView>
     </View>
   );
 };
