@@ -67,10 +67,11 @@ export default function App() {
 
   const onStateChange = useCallback((state) => {
     if (state === "ended") {
-      setPlaying(false);
+     
       Alert.alert("video has finished playing!");
-      handleVideoChange(10);
-      setStart()
+      handleVideoChange();
+      setStart(5)
+      setEnd(9)
     }
   }, []);
 
@@ -79,7 +80,7 @@ export default function App() {
   }, []);
 
   const handleVideoChange = () => {
-    setVideoId('iee2TATGMyI');
+    setVideoId('KILUsa4crzI');
   };
 
   return (

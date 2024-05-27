@@ -45,7 +45,7 @@ const Tab = createBottomTabNavigator();
 // const Tab = createMaterialTopTabNavigator();
 const DataContext = createContext();
 
-global.Url = 'http://192.168.204.124/BlinkBackend';
+global.Url = 'http://192.168.1.114/BlinkBackend';
 
 
 
