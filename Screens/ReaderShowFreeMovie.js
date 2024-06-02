@@ -7,6 +7,8 @@ import YoutubePlayer from "react-native-youtube-iframe";
 import {  ArrowLeftIcon } from 'react-native-heroicons/outline';
 
 const ReaderShowFreeMovie = ({route}) => {
+  const[movieId,SetMovieId]=useState()
+  const[writerId,SetWriterId]=useState()
     const [visible,SetVisible]=useState(false)
     const [summary,SetSummary] = useState('Summary DAta')
     const [clips, setClips] = useState([
@@ -39,8 +41,10 @@ const ReaderShowFreeMovie = ({route}) => {
       // console.log('I am urlseeeeeee',clips);
       console.log('I ma  cuurreeentIndexxxx',currentUrlIndex)
       console.log('I am summary',summary)
+      console.log('writerid',writerId)
+      console.log('movieid',movieId)
 //   showFreeMovie()
-    },[currentUrlIndex,summary]);
+    },[currentUrlIndex,summary,writerId,movieId]);
     const showFreeMovie = async () => {
         try {
             let se = route.params;
@@ -50,6 +54,9 @@ const ReaderShowFreeMovie = ({route}) => {
           const response = await fetch(global.Url + `/api/editor/ViewSentProject?Movie_ID=${s}`);
           const data = await response.json();
           console.log('View Project dataaaaaa:', data);
+SetWriterId(data.Summary[0].Writer_ID)
+SetMovieId(data.Movie_ID)
+console.log(writerId,movieId,'heeheheheh')
           const summarydata= data.Summary[0].Summary1;
         SetSummary(summarydata)
         const urlse = data.Clips
@@ -65,6 +72,10 @@ const ReaderShowFreeMovie = ({route}) => {
       useEffect(()=>{
         showFreeMovie()
       },[s])
+
+const Test=()=>{
+  Alert.alert('press')
+}
 
       const onStateChange = useCallback((state) => {
         if (state === "ended") {
@@ -93,6 +104,42 @@ const ReaderShowFreeMovie = ({route}) => {
       };
 
 
+
+
+
+      const sendProject = async () => {
+        const sendprojectData = {
+          Reader_ID: `${global.Readerid}`,
+          Writer_ID: writerId,
+          Movie_ID: movieId,
+        };
+      
+        console.log('Send project data:', sendprojectData);
+      
+        try {
+          const response = await fetch(global.Url + '/api/Reader/AddReaderFavorites', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json', // specify that the content is JSON
+            },
+            body: JSON.stringify(sendprojectData), // convert object to JSON string
+          });
+      
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+      
+          const data = await response.json();
+          alert(JSON.stringify(data, null, 2)); // Displaying response data
+          console.log('Sent project response:', data);
+        } catch (error) {
+          console.error('Error:', error.message);
+        }
+        
+      };
+     
+    
+
       const YouTubePlayer = ({ End_time, Start_time, Title, Url, Clips_ID }) => {
         const [playing, setPlaying] = useState(false);
       
@@ -101,6 +148,10 @@ const ReaderShowFreeMovie = ({route}) => {
             setPlaying(false);
           }
         };
+
+
+        
+
       
         return (
           <View key={Clips_ID} style={{ marginBottom: 20 }}>
@@ -111,9 +162,10 @@ const ReaderShowFreeMovie = ({route}) => {
               videoId={Url}
               onChangeState={onStateChange}
               initialPlayerParams={{
+                controls:0,
                 start: Start_time,
                 end: End_time,
-              }}
+                             }}
             />
           </View>
         );
@@ -129,7 +181,7 @@ const ReaderShowFreeMovie = ({route}) => {
 
 
 
-
+const[cModal,SetcModal]=useState(false)
 
   return (
     <View style={styles.container}>
@@ -176,7 +228,7 @@ animationType='slide'
 
 
       <Text style={styles.title}>ReaderShowMovie</Text>
-      <ScrollView>
+      <ScrollView >
       <Text style={{backgroundColor:'grey',paddingTop:30,paddingBottom:250}} >
       <Text style={{
         fontSize: 24,
@@ -188,7 +240,19 @@ animationType='slide'
        <RenderHTML contentWidth={width}
        style={{Color:'blue'}}
        source={source}/>
+       
        </Text>
+       <Button title='Watch Clips' onPress={()=>SetcModal(true)}></Button>
+       <Modal
+       transparent={false}
+       visible={cModal}
+       animationType='slide'
+       >
+      
+       <View style={styles.container}>
+       <TouchableOpacity onPress={()=>SetcModal(false)}>
+      <ArrowLeftIcon size={30} color='yellow' / > 
+      </TouchableOpacity>
        <Text style={{
         fontSize: 24,
         fontWeight: 'bold',
@@ -196,7 +260,7 @@ animationType='slide'
         marginBottom: 10,
         textAlign: 'center',
         color: '#FFFFFF', // White color
-    }}>   Compound_Clip </Text>
+    }}>   HighLights </Text>
     {clips.length > 0 && (
 <YoutubePlayer
         key={clips[currentIndex].Clips_ID}
@@ -210,15 +274,28 @@ animationType='slide'
         onChangeState={onStateChange}
       />
     )}
-      <Button title='Show Simple clips' color='grey' onPress={()=>SetVisible(true)}></Button>
-       <View>
+      <Button title='Show Simple clips' color='grey' onPress={()=>SetVisible(true)}>
+        </Button>
+        </View>
+        </Modal>
+      
+       <View style={{flexDirection:'row',paddingTop:20}}>
+       <Text style={{
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 20,
+        textAlign: 'center',
+        color: '#FFFFFF', // White color
+    }}> Rate Writer  </Text>
+       
         <AirbnbRating
 
         count={5}
         defaultRating={3}
         
         size={20}
-        onFinishRating={(rating)=>alert('Rating Added')}
+        showRating={false}
+        // onFinishRating={(rating)=>alert('Rating Added')}
          />
         {/* <AirbnbRating
   count={11}
@@ -227,6 +304,28 @@ animationType='slide'
   size={20}
 /> */}
 </View>
+<View style={{flexDirection:'row',paddingTop:20}}>
+       <Text style={{
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 20,
+        textAlign: 'center',
+        color: '#FFFFFF', // White color
+    }}> Rate Movie/Drama  </Text>
+       
+        <AirbnbRating
+
+        count={5}
+        defaultRating={3}
+        
+        size={20}
+        showRating={false}
+        onFinishRating={(rating)=>console.log('ratttting',rating)
+          
+        }
+         />
+         </View>
+         <Button title='Add Favourite' onPress={()=>sendProject()}></Button>
 </ScrollView>
     </View>
   )

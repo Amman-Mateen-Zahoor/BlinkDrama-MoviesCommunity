@@ -247,6 +247,7 @@ animationType='slide'
           {/* > */}
           <Text style={styles.buttonText}>Send Project</Text>
         </TouchableOpacity>
+      
       </View>
       </ScrollView>
     </View>

@@ -55,7 +55,7 @@ useEffect(()=>{
             Type:  
            {acceptedProject.ProposalData.Type} 
             </Text></View>
-            <TouchableOpacity style={style.button} onPress={()=>{{navigation.navigate('paidShowMovie',{m:acceptedProject.Movie_ID} )}}}>
+            <TouchableOpacity style={style.button} onPress={()=>{{navigation.navigate('paidShowMovie',{ Movie_ID: acceptedProject.Movie_ID })}}}>
         <Text style={style.buttonText}>view</Text>
         </TouchableOpacity>
                 </View>

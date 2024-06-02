@@ -9,68 +9,19 @@ export default function Login({navigation}) {
   const [email,setEmail]=useState('')
   const [password,setPassword]=useState('')
   const [id,SetId]= useState('')
-  const[name,SetName]=useState()
-  const[upassword,SetUPassword]=useState()
+  const[readerId,SetReaderID]=useState()
+
+  
   
 
-  // const saveLoginInfo = async (Id) => {
-  //   try {
-  //     await AsyncStorage.setItem('Id', id);
-  //     await AsyncStorage.setItem('wId',id);
-  //     console.log('Login information saved successfully!');
-  //   } catch (error) {
-  //     console.log('Error saving login information:', error);
-  //   }
-  // };
-  // const getLoginInfo = async () => {
-  //   try {
-  //     const username = await AsyncStorage.getItem('Id');
-      
-  //     if (username !== null && password !== null) {
-  //       // Login with the retrieved username and password
-  //       console.log('Retrieved login information:');
-        
-  //     } else {
-  //       console.log('No login information found.');
-  //     }
-  //   } catch (error) {
-  //     console.log('Error retrieving login information:', error);
-  //   }
-  // };
-  // const [uData,SetUData]=useState('')
-//   const login=async()=>{
-//     const responce= await fetch(global.Url + `/api/User/Login?email=${email}&password=${password}`)
-//     const data= await responce.json()
-//     console.log('i am login data',data)
-//     const SendWriterId = data.UserData.Writer_ID
-//     console.log('i am writerId',SendWriterId)
-//     // SetUData(data)
-//     // console.log('kuch nii',uData.UserData.Image)
-
-// //     const writerID = data.UserData.Writer_ID;
-// // console.log(writerID); // Output: 3
-
-
-//     console.log(data.Role)
-//     if (data.Role === 'Writer') {
-//       navigation.navigate('WriterMainScreen', 123);
-//     }
-//     else if(data.Role==='Editor'){
-//       navigation.navigate('EditorMainScreen',data)
-//     }
-//      else {
-//        console.log("bbbbbbbbbb")
-//        alert(JSON.stringify(data));
-//     }
-    
-//   }
-
+  
 
 const login = async () => {
   try {
     const response = await fetch(global.Url + `/api/User/Login?email=${email}&password=${password}`);
     const data = await response.json();
     console.log('Login data:', data);
+
     
     if (data.Role === 'Writer') {
       const writerId = data.UserData.Writer_ID;
@@ -99,6 +50,10 @@ const login = async () => {
     
     else if (data.Role === 'Reader') {
       console.log('baaaalllaaannncceee',data.UserData[0].Balance)
+      const ReaderId=data.UserData[0].Reader_ID;
+      global.Readerid=ReaderId
+      console.log('readeerr Iddd',`${global.Readerid}`)
+
       if(data.UserData[0].Balance==0){
       navigation.navigate('ReadersTab', data);
     }

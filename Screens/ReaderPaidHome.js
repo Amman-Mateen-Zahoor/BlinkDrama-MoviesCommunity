@@ -8,6 +8,7 @@ const ReaderPaidHome = ({navigation}) => {
 
   const[image,SetImage]=useState('')
     const[mname,SetMname]=useState('')
+    const[mid,SetMId]=useState('')
     const[type,SetType]= useState('')
     const [acceptedProject, setAcceptedProject] = useState([]);
     const [projectimage,SetProjectImage]= useState('')
@@ -18,6 +19,7 @@ const ReaderPaidHome = ({navigation}) => {
           console.log('no data', data)
           const a = data.Project
           setAcceptedProject(a);
+          SetMId()
           console.log('no data projectttttttttttttt 1', data.Project)
           console.log('useeeestaattttee',acceptedProject)
           const pimage= data.Project[0].ProposalData.Image
@@ -117,7 +119,7 @@ fetchAcceptedProjectData()
           <Text style={{color:'yellow'}}>{acceptedProject.ProposalData.Movie_Name}</Text>
           <Text style={{color:'yellow'}}>{acceptedProject.Movie_ID}</Text>
 
-          <TouchableOpacity style={styles.button} onPress={()=>{{navigation.navigate('paidShowMovie'),{ Movie_ID: acceptedProject.Movie_ID }}}} >
+          <TouchableOpacity style={styles.button} onPress={()=>{{navigation.navigate('paidShowMovie',{ Movie_ID: acceptedProject.Movie_ID })}}} >
         <Text style={styles.buttonText}>view</Text>
         </TouchableOpacity>
                     <View>

@@ -37,6 +37,7 @@ import ReaderPaidHome from './Screens/ReaderPaidHome';
 import ReaderSeeAllBtnPaid from './Screens/ReaderSeeAllBtnPaid';
 import ReaderDrawerPaid from './Screens/ReaderDrwerPaid';
 import ReaderShowPaidMovie from './Screens/ReaderShowPaidMovie';
+import Favourites from './Screens/Favourites';
 
 
 
@@ -45,7 +46,7 @@ const Tab = createBottomTabNavigator();
 // const Tab = createMaterialTopTabNavigator();
 const DataContext = createContext();
 
-global.Url = 'http://192.168.0.105/BlinkBackend';
+global.Url = 'http://192.168.0.108/BlinkBackend';
 
 
 
@@ -80,6 +81,7 @@ function AppStack() {
     <Stack.Screen name='Seeallbtnpaid' options={{headerShown:false}} component={ReaderSeeAllBtnPaid}/>
     <Stack.Screen name='paidhome' options={{headerShown:false}} component={ReaderPaidHome}/>
     <Stack.Screen name ='paidtab' options={{headerShown:false}} component={ReaderPaidAppTab}/>
+    <Stack.Screen name='fav' options={{headerShown:false}} component={Favourites}/>
 
     <Stack.Screen name='paidShowMovie' options={{headerShown:false}} component={ReaderShowPaidMovie}/>
     </Stack.Navigator>
@@ -215,9 +217,9 @@ function ReaderAppTab() {
       <Tab.Screen name='house6' 
       options={{
         tabBarIcon:({color , size})=>
-        <Ionicons name="receipt" size={30} color="#900" />
+        <Ionicons name="heart" size={30} color="#900" />
        }}
-      component={newAcceptWriter}/>
+      component={Favourites}/>
       <Tab.Screen name='WriterNotif' 
       options={{
         tabBarIcon:({color , size})=>(
@@ -260,9 +262,9 @@ function ReaderPaidAppTab() {
       <Tab.Screen name='house6' 
       options={{
         tabBarIcon:({color , size})=>
-        <Ionicons name="receipt" size={30} color="#900" />
+        <Ionicons name="heart" size={30} color="#900" />
        }}
-      component={newAcceptWriter}/>
+      component={Favourites}/>
       <Tab.Screen name='WriterNotif' 
       options={{
         tabBarIcon:({color , size})=>(

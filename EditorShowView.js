@@ -135,6 +135,7 @@ SetsproId(a)
           initialPlayerParams={{
             start: Start_time,
             end: End_time,
+            controls:0,
           }}
         />
       </View>
@@ -259,8 +260,12 @@ SetsproId(a)
        placeholderTextColor='yellow'
        onChangeText={SetSummary}
        
+       
 ></TextInput></View> */}
-<Text style={{backgroundColor:'grey'}} >
+
+<View style={{paddingBottom:50}}>
+<ScrollView horizontal={true} >
+<Text style={{backgroundColor:'grey', width:'auto',paddingTop:30,paddingBottom:250}} >
   
 
       {summary ? <RenderHTML contentWidth={width} 
@@ -268,6 +273,7 @@ SetsproId(a)
       source={source} /> : console.log(summary)}
       
       </Text>
+      </ScrollView></View>
       <View style={{paddingBottom:5}}></View>
       <Button title='Rewrite' onPress={()=>SetVisible(true)} ></Button>
             <Text style={{
@@ -276,7 +282,7 @@ SetsproId(a)
         marginBottom: 20,
         textAlign: 'center',
         color: '#FFFFFF', // White color
-    }}>         Compound Clip </Text>
+    }}>         HIGLIGHTS </Text>
       
       <Modal
 transparent={false}
@@ -356,6 +362,7 @@ animationType='slide'
       
       </View> */} 
       <View style={styles.container2}>
+        <ScrollView></ScrollView>
 <Text style={{
         fontSize: 24,
         fontWeight: 'bold',

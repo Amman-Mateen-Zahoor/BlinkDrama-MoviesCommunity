@@ -11,7 +11,7 @@ const VideoPlayer = ({ route , navigation }) => {
   const[visible,SetVisible]=useState(false)
   const dataa = route.params;
   const[datavideoid,SetDataVideoId]=useState(dataa.videoId)
-  // this is last comment console.log('i am player data',dataa)
+   console.log('i am player data',dataa)
   const [totalDuration, setTotalDuration] = useState(1);
   const [sliderValues, setSliderValues] = useState([0, 1]);
   const [videoUrl, setVideoUrl] = useState('https://www.youtube.com/embed/${dataa.videoId}?start=0&end=65&autoplay=1');
