@@ -12,6 +12,7 @@ const VideoPlayer = ({ route , navigation }) => {
   const dataa = route.params;
   const[datavideoid,SetDataVideoId]=useState(dataa.videoId)
    console.log('i am player data',dataa)
+   console.log('checkk compound clip',dataa?.midata?.compound)
   const [totalDuration, setTotalDuration] = useState(1);
   const [sliderValues, setSliderValues] = useState([0, 1]);
   const [videoUrl, setVideoUrl] = useState('https://www.youtube.com/embed/${dataa.videoId}?start=0&end=65&autoplay=1');
@@ -19,7 +20,8 @@ const VideoPlayer = ({ route , navigation }) => {
   const[sendId,SetSendId]=useState(dataa.videoId)
   const[start,SetStart]=useState()
   const[end,SetEnd]=useState()
-const [compoundUrl, SetCopoundUrl]=useState([])
+  const compound1=dataa?.midata?.compound || []
+const [compoundUrl, SetCopoundUrl]=useState(compound1)
 const[test,SetTest]=useState('&autoplay=1')
 useEffect(()=>{},[videoUrl])
 useEffect(() => {
@@ -118,7 +120,7 @@ useEffect(() => {
           {/* <TouchableOpacity style={styles.button} onPress={()=>MakeClip}> */}
           {/* <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('clip', { videoUrl: videoUrl , isCompoundClip:false })}> */}
           <TouchableOpacity style={styles.button} onPress={()=>SetVisible(true)}>
-         <Text style={styles.buttonText}>MakeClip</Text>
+         <Text style={styles.buttonText}>Add Title</Text>
         </TouchableOpacity></View>
 <Modal
 transparent={false}
@@ -144,11 +146,19 @@ animationType='slide'
        
       
         </View>
-        <View style={{alignSelf:'flex-start',paddingLeft:4,paddingEnd:5}}>
+        <View style={{alignSelf:'flex-start',paddingLeft:4,paddingEnd:5,flexDirection:'row'}}>
           <TouchableOpacity style={styles.button}
          onPress={()=>navigation.navigate('ShowWriterClips',{compound : compoundUrl, data1: dataa , videoId:dataa.videoId})}>
          <Text style={styles.buttonText}>show clips</Text>
+        </TouchableOpacity>
+        <View style={{alignSelf:'flex-start',paddingLeft:4,paddingEnd:5}}>
+          <TouchableOpacity style={styles.button}
+         onPress={()=>navigation.navigate('VideoNavigation',{compound : compoundUrl, data1: dataa , videoId:dataa.videoId})}>
+         <Text style={styles.buttonText}>Add new Video</Text>
         </TouchableOpacity></View>
+        </View>
+
+        
       </View>
     </View>
   );

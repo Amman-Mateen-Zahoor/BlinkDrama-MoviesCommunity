@@ -42,7 +42,7 @@
 
 
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet ,Dimensions } from 'react-native';
 
 const MiniCard = ({ videoId,title,channel,midata}) => {
@@ -50,9 +50,10 @@ const MiniCard = ({ videoId,title,channel,midata}) => {
       // console.log('kkkkkkkkkkkkkkkkkkkkkkkkkkk',videoId,midata)
       // im last comment console.log('kkkkkkkkkkkkkkkkkkkkkkkkkkk',videoId,midata)
       const navigation = useNavigation()
+      const[compound,SetCompound]=useState([])
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate('Player',{videoId:videoId,midata})}
+      onPress={() => navigation.navigate('Player',{videoId:videoId,midata,Compound:compound})}
       style={styles.container}
     >
       <View style={{ flexDirection: 'row', margin: 10, marginBottom: 0, backgroundColor: '#D3D3D3' }}>

@@ -112,7 +112,7 @@ import {useTheme} from '@react-navigation/native'
 
 const SearchScreen = ({navigation , route})=>{
     const midata = route.params
-    // im last comment console.log('I m midata from Accept propsal screen',midata) 
+     console.log('I m midata from Accept propsal screen',midata) 
     const {colors} =  useTheme()
     const mycolor = colors.iconColor
 

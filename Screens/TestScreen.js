@@ -56,8 +56,8 @@ export default function TestScreen() {
   
   const clips = [
     { End_time: 5, Start_time: 0, Title: "I am title", clip: "S7KS4i0_KFE", isCompoundClip: true },
-    { End_time: 15, Start_time: 10, Title: "I am title", clip: "KILUsa4crzI", isCompoundClip: true },
-    { End_time: 50, Start_time: 40, Title: "I am title", clip: "S7KS4i0_KFE", isCompoundClip: true },
+    { End_time: 15, Start_time: 10, Title: "I am title", clip: "S7KS4i0_KFE", isCompoundClip: true },
+    { End_time: 50, Start_time: 40, Title: "I am title", clip: "KILUsa4crzI", isCompoundClip: true },
     { End_time: 20, Start_time: 10, Title: "I am title", clip: "S7KS4i0_KFE", isCompoundClip: true }
     
   ];

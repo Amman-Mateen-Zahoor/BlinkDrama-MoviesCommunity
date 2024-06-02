@@ -123,9 +123,9 @@ useEffect(()=>{
   const[Summary,setSummary]=useState('') 
 const sendproject = async () => {
   const sendprojectData = {
-    SentProposal_ID: apple.SentProposal_ID,
-    Movie_ID: apple.Movie_ID,
-    Writer_ID: apple.Writer_ID,
+    SentProposal_ID: `${global.SentProposalData}`,
+    Movie_ID: `${global.Movie_ID}`,
+    Writer_ID: `${global.Writer_ID}`,
     Summary: Summary,
     Clips: clips
     

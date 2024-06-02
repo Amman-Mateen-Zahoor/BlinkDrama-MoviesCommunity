@@ -8,6 +8,12 @@ const AcceptProposal = ( {navigation, route } ) => {
         const data= route.params.proposal;
           console.log('hiiiiii',data)
           setSentPropossal(data)
+          global.SentProposalData=data.SentProposal_ID
+      console.log('SentProposal_ID',`${global.SentProposalData}`)
+      global.Movie_ID=data.Movie_ID
+      console.log('Movie_ID',`${global.Movie_ID}`)
+      global.Writer_ID=data.Writer_ID
+      console.log('Writer_ID',`${global.Writer_ID}`)
         
        
       },[])
