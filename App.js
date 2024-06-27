@@ -38,6 +38,12 @@ import ReaderSeeAllBtnPaid from './Screens/ReaderSeeAllBtnPaid';
 import ReaderDrawerPaid from './Screens/ReaderDrwerPaid';
 import ReaderShowPaidMovie from './Screens/ReaderShowPaidMovie';
 import Favourites from './Screens/Favourites';
+import Subscription from './Screens/Subscription';
+import AdminShowRequestScreen from './Screens/AdminShowRequestScreen';
+import BalanceRequest from './Screens/BalanceRequest';
+import AddEditor from './Screens/AddEditor';
+import PaidView1 from './Screens/PaidView1';
+
 
 
 
@@ -46,7 +52,7 @@ const Tab = createBottomTabNavigator();
 // const Tab = createMaterialTopTabNavigator();
 const DataContext = createContext();
 
-global.Url = 'http://192.168.0.108/BlinkBackend';
+global.Url = 'http://192.168.1.102/BlinkBackend';
 
 
 
@@ -82,8 +88,13 @@ function AppStack() {
     <Stack.Screen name='paidhome' options={{headerShown:false}} component={ReaderPaidHome}/>
     <Stack.Screen name ='paidtab' options={{headerShown:false}} component={ReaderPaidAppTab}/>
     <Stack.Screen name='fav' options={{headerShown:false}} component={Favourites}/>
+    <Stack.Screen name='Subscription' options={{headerShown:false}} component={Subscription}/>
 
     <Stack.Screen name='paidShowMovie' options={{headerShown:false}} component={ReaderShowPaidMovie}/>
+    <Stack.Screen name='admin' options={{headerShown:false}} component={AdminAppTab}/>
+    <Stack.Screen name='Admin' options={{headerShown:false}} component={AdminShowRequestScreen}/>
+    <Stack.Screen name='Balance' options={{headerShown:false}} component={BalanceRequest}/>
+    <Stack.Screen name='paid' options={{headerShown:false}} component={PaidView1}/>
     </Stack.Navigator>
    
     
@@ -160,12 +171,15 @@ function AppTab2() {
 
        tabBarIcon:({color , size})=>
        (<Ionicons name="home" size={30} color="#900" />),
+       tabBarBadge:3,
+        tabBarBadgeStyle: {backgroundColor:'yellow'}
        
       }} component={WriterMainScreen}/>
       <Tab.Screen name='Home3'
       options={{
         tabBarIcon:({color , size})=>(
-        <Fontisto name="person" size={30} color="#900" />)
+        <Fontisto name="person" size={30} color="#900" />),
+        
        }}
       component={WriterDrawer}/>  
       <Tab.Screen name='house6' 
@@ -174,15 +188,14 @@ function AppTab2() {
         <Ionicons name="receipt" size={30} color="#900" />
        }}
       component={newAcceptWriter}/>
-      <Tab.Screen name='WriterNotif' 
+      {/* <Tab.Screen name='WriterNotif' 
       options={{
         tabBarIcon:({color , size})=>(
         <Ionicons name="notifications" size={30} color="#900" />),
-        tabBarBadge:3,
-        tabBarBadgeStyle: {backgroundColor:'yellow'}
+        
        }}
        
-      component={WriterNotifications}/>
+      component={WriterNotifications}/> */}
     </Tab.Navigator>
   );
 }
@@ -214,13 +227,13 @@ function ReaderAppTab() {
         <Fontisto name="person" size={30} color="#900" />)
        }}
       component={ReaderDrawer}/>  
-      <Tab.Screen name='house6' 
+       <Tab.Screen name='house6' 
       options={{
         tabBarIcon:({color , size})=>
         <Ionicons name="heart" size={30} color="#900" />
        }}
-      component={Favourites}/>
-      <Tab.Screen name='WriterNotif' 
+      component={Favourites}/> 
+       <Tab.Screen name='WriterNotif' 
       options={{
         tabBarIcon:({color , size})=>(
         <Ionicons name="notifications" size={30} color="#900" />),
@@ -228,7 +241,7 @@ function ReaderAppTab() {
         tabBarBadgeStyle: {backgroundColor:'yellow'}
        }}
        
-      component={WriterNotifications}/>
+      component={WriterNotifications}/> 
     </Tab.Navigator>
   );
 }
@@ -258,14 +271,14 @@ function ReaderPaidAppTab() {
         tabBarIcon:({color , size})=>(
         <Fontisto name="person" size={30} color="#900" />)
        }}
-      component={ReaderDrawerPaid}/>  
-      <Tab.Screen name='house6' 
+      component={ReaderDrawer}/>  
+       <Tab.Screen name='house6' 
       options={{
         tabBarIcon:({color , size})=>
         <Ionicons name="heart" size={30} color="#900" />
        }}
-      component={Favourites}/>
-      <Tab.Screen name='WriterNotif' 
+      component={Favourites}/> 
+       <Tab.Screen name='WriterNotif' 
       options={{
         tabBarIcon:({color , size})=>(
         <Ionicons name="notifications" size={30} color="#900" />),
@@ -273,12 +286,58 @@ function ReaderPaidAppTab() {
         tabBarBadgeStyle: {backgroundColor:'yellow'}
        }}
        
-      component={WriterNotifications}/>
+      component={WriterNotifications}/> 
     </Tab.Navigator>
   );
 }
 
 
+
+
+function AdminAppTab() {
+  return (
+    <Tab.Navigator 
+    screenOptions={{
+      tabBarActiveTintColor:'yellow',
+      tabBarInactiveTintColor:'blue',
+      tabBarShowLabel:false,
+      headerShown:false,
+      headerPressColor:'yellow',
+      tabBarStyle:{backgroundColor:'coral'}
+    }}
+    >
+      <Tab.Screen name='ReaderHome1'
+       options={{
+
+       tabBarIcon:({color , size})=>
+       (<Ionicons name="home" size={30} color="#900" />),
+       
+      }} 
+      component={AdminShowRequestScreen}/>
+      <Tab.Screen name='Home2'
+      options={{
+        tabBarIcon:({color , size})=>(
+        <Fontisto name="person" size={30} color="#900" />)
+       }}
+      component={AddEditor}/>  
+      {/* <Tab.Screen name='house6' 
+      options={{
+        tabBarIcon:({color , size})=>
+        <Ionicons name="heart" size={30} color="#900" />
+       }}
+      component={Favourites}/> */}
+      {/* <Tab.Screen name='WriterNotif' 
+      options={{
+        tabBarIcon:({color , size})=>(
+        <Ionicons name="notifications" size={30} color="#900" />),
+        tabBarBadge:3,
+        tabBarBadgeStyle: {backgroundColor:'yellow'}
+       }}
+       
+      component={WriterNotifications}/> */}
+    </Tab.Navigator>
+  );
+}
 
 
 

@@ -100,7 +100,7 @@
 
 
 
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import { StyleSheet, Text, View,ScrollView,TextInput,FlatList,ActivityIndicator,Animated} from 'react-native';
 //import {Ionicons} from '@expo/vector-icons'
 import Ionicons from 'react-native-vector-icons/dist/Ionicons';
@@ -111,8 +111,29 @@ import {useTheme} from '@react-navigation/native'
 //https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=songs&type=video&part=contentDetails&key=AIzaSyDtCWCduSedfthvh
 
 const SearchScreen = ({navigation , route})=>{
-    const midata = route.params
-     console.log('I m midata from Accept propsal screen',midata) 
+    const[SentPropossal,setSentPropossal]=useState({})
+    
+    // const midata = route.params
+
+    //  console.log('I m midata from Accept propsal screen',midata) 
+    
+    let data= route.params;
+    console.log('hiiiiii',data)
+    useEffect(()=>{
+        
+          setSentPropossal(data)
+          global.SentProposalData=data.SentProposal_ID
+      console.log('SentProposal_ID',`${global.SentProposalData}`)
+      global.Movie_ID=data.Movie_ID
+      console.log('Movie_ID',`${global.Movie_ID}`)
+      global.Writer_ID=data.Writer_ID
+      console.log('Writer_ID',`${global.Writer_ID}`)
+        
+       
+      },[])
+
+
+
     const {colors} =  useTheme()
     const mycolor = colors.iconColor
 
@@ -158,7 +179,7 @@ const SearchScreen = ({navigation , route})=>{
              <Ionicons
              style={{color:'black'}}
              name="arrow-back-outline" size={32}
-            //  onPress={()=>navigation.goBack()}
+             onPress={()=>navigation.goBack()}
              />
              <TextInput
              style={{
@@ -186,7 +207,7 @@ const SearchScreen = ({navigation , route})=>{
                 videoId={item.id.videoId}
                 title={item.snippet.title}
                 channel={item.snippet.channelTitle}
-                midata={midata}
+                midata={data}
                />
            }}
            keyExtractor={item=>item.id.videoId}

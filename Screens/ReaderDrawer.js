@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 
 
 
-const ReaderDrawer =  () => {
+const ReaderDrawer =  ({navigation}) => {
 const[visible,SetVisible]=useState('false')
 const[username,SetUserName]=useState('')
 const[balance,SetBalance]=useState('')
@@ -11,7 +11,7 @@ const[image,SetImage]= useState('')
 
   const login = async () => {
     try {
-      const response = await fetch(global.Url + `/api/User/Login?email=Abdullah@gmail.com&password=12345`);
+      const response = await fetch(global.Url + `/api/User/Login?email=${global.Readeremail}&password=${global.Readerpassword}`);
       const data = await response.json();
       console.log('Login data:', data);
       if(data!='Invalid email or password'){
@@ -48,15 +48,15 @@ useEffect(
           </View>
           <View style={{paddingLeft:20}}>
             <Text style={{fontSize:18,fontWeight:'bold',}}>
-            Name: Abdullah
+            Name: {username}
             </Text>
             <Text style={{fontSize:18,fontWeight:'bold',}}>
-            Balance : Free
+            Balance : {balance}
             </Text>
            
             <View >
             {/* <TouchableOpacity style={{borderCurve:'circular', borderColor:'blue'}}><Text style={{color:'green',borderRadius:12,fontSize:30}}>Accept</Text></TouchableOpacity> */}
-            <TouchableOpacity >
+            <TouchableOpacity onPress={()=>navigation.navigate('Login')}>
               <Text style={{color:'red',borderRadius:12,fontSize:30}}>Logout</Text></TouchableOpacity>
             </View>
             </View>

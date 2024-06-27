@@ -292,7 +292,7 @@ const EditorSendProposal = ({navigation,route}) => {
       formData.append('Image', image);
       const response = await fetch(
         `${global.Url}/api/Editor/perpossal?MoviName=${encodedMovieName}&type=${type}&movieId=${encodedMovieId}
-       &genre=${genre} &director=${encodedDirector}&episode=${episode}&editorId=1&DueDate=${formattedDate}&status=sent&WriterId=${encodedWriter}&imagePath=${image}&balance=${balance}`
+       &genre=${genre} &director=${encodedDirector}&episode=${episode}&editorId=${global.EId}&DueDate=${formattedDate}&status=sent&WriterId=${encodedWriter}&imagePath=${image}&balance=${balance}`
         // {
         //   method: 'POST',
         //   headers: {

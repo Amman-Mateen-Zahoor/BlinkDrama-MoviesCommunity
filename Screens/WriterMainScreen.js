@@ -21,9 +21,9 @@ const[gId,SetGId]=useState(`${global.wId}`)
 const RewriteProject=async()=>{
   const responce= await fetch(global.Url + `/api/Writer/ViewRewriteProject?Writer_ID=${gId}`)
   const data= await responce.json()
-  console.log('i am data From REwrite api',data)
+  // console.log('i am data From REwrite api',data)
   const filteredData = data;
-  console.log('REwriteeeee Map',filteredData)
+  // console.log('REwriteeeee Map',filteredData)
   SetRewriteProposal(filteredData)
   
 }
@@ -38,14 +38,14 @@ const RewriteProject=async()=>{
       const data= await responce.json()
       console.log('i am from 2nd console',data)
       const maparray =data.map(obj=>obj.Image)
-      console.log('I aam Showpropsal Map',maparray)
+      // console.log('I aam Showpropsal Map',maparray)
       setSentPropossal(data)
       
     }
     login()
     RewriteProject()
     const b = `${global.wId}`
-console.log('plzzzzzzzzzzzzzzzzzzzzzzzzzz heeeeeeeeeeeeeeeeeeeeeeelllllllllllllpppppp',b)
+// console.log('plzzzzzzzzzzzzzzzzzzzzzzzzzz heeeeeeeeeeeeeeeeeeeeeeelllllllllllllpppppp',b)
 SetGId(b)
 if(b!=null){
 console.log('i am gid',gId)}
@@ -84,7 +84,7 @@ console.log('i am gid',gId)}
       }
   
       const data = await response.json();
-      console.log(data);
+      // console.log(data);
   
       // Display alert with received data
       alert(JSON.stringify(data));
@@ -112,7 +112,7 @@ console.log('i am gid',gId)}
       }
   
       const data = await response.json();
-      console.log(data);
+      // console.log(data);
   
       // Display alert with received data
       alert(JSON.stringify(data));

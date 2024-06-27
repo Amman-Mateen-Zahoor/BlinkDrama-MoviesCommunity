@@ -28,6 +28,9 @@ const[multiurl,setMultiUrl]=useState([])
     // "https://www.youtube.com/embed/VO0D7RpMhCc?start=220&end=230"
     // Add more URLs as needed
   ]);
+  clips.forEach((clip, index) => {
+    clip.id = index; // Add index to the description
+  });
   const videoIds = clips.map(clip => clip.Url);
   const startTimes = clips.map(clip => clip.Start_time);
   const endTimes = clips.map(clip => clip.End_time);
@@ -308,7 +311,7 @@ animationType='slide'
       {data.map(item => (
         
         <YouTubePlayer
-          key={item.Clips_ID}
+          key={item.id}
           End_time={item.End_time}
           Start_time={item.Start_time}
           Title={item.Title}
@@ -370,18 +373,18 @@ animationType='slide'
         textAlign: 'center',
         color: '#FFFFFF', // White color
     }}>Add Comment </Text>
-  {/* <RichEditor
+  <RichEditor
     ref={richText}
     placeholder="Start typing..."
     onChange={SetSummary} // Use onChange instead of onTextChange
-  /> */}
-  <TextInput placeholder='Enter Comment' 
+  />
+  {/* <TextInput placeholder='Enter Comment' 
   ref={richText}
   onChange={SetSummary}
-  ></TextInput>
-   {/* <RichToolbar
+  ></TextInput> */}
+   <RichToolbar
         getEditor={() => richText.current}
-      />*/}
+      />
       <Button title='Rewrite' onPress={Rewrite}></Button> 
 </View>
       </Modal>
@@ -391,7 +394,7 @@ animationType='slide'
     
 {clips.length > 0 && (
 <YoutubePlayer
-        key={clips[currentIndex].Clips_ID}
+        key={clips[currentIndex].id}
         height={300}
         play={playing}
         videoId={clips[currentIndex].Url}

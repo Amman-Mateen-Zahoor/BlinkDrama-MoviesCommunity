@@ -55,7 +55,7 @@ console.log(writerId)
               <Text style={styles.detailText}>Director: {proposal.Director}</Text>
               <Text style={styles.detailText}>Due Date: {proposal.DueDate}</Text>
               <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AcceptProposal',{proposal})}>
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('VideoNavigation',{proposal})}>
                   <Text style={styles.buttonText}>Write...</Text>
                 </TouchableOpacity>
               </View>

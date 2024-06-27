@@ -1,7 +1,10 @@
 import { StyleSheet, Text, Touchable, TouchableOpacity, View } from 'react-native'
 import React from 'react'
+import navigation from '../Navigation/Navigation'
 
-const Subscription = () => {
+const Subscription = ({navigation,route}) => {
+  const r =route.params
+  console.log('sssss',r)
   return (
     <View style={styles.container}> 
       <Text style={styles.title1}>Subscription</Text>
@@ -17,7 +20,7 @@ const Subscription = () => {
       <Text style={styles.text1}>1 Free Movie/Drama Daily </Text>
       <View>
        
-       <TouchableOpacity style={styles.button} >
+       <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('Login')}>
        <Text style={styles.buttonText}>Subscribe</Text>
        </TouchableOpacity></View>
     </View>
@@ -27,7 +30,7 @@ const Subscription = () => {
       <Text style={styles.text1}>All Movies/Dramas Daily </Text>
       <View>
        
-       <TouchableOpacity style={styles.button} >
+       <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('Balance',r)} >
        <Text style={styles.buttonText}>Subscribe</Text>
        </TouchableOpacity></View>
     </View>

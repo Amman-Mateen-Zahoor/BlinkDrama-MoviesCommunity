@@ -6,16 +6,17 @@ const EditorNotifications = ({navigation}) => {
 
 
 useEffect(()=>{
-  console.log('I ma updated Project data',projectData)
+  console.log('I ma updated Project data//////////',projectData)
 },[projectData])
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(global.Url + '/api/Editor/ReceiveSentProject');
+        const response = await fetch(global.Url + `/api/Editor/ReceiveSentProject?Editor_ID=${global.EId}`);
         const data = await response.json();
         console.log('I m project data !!!!!!!!!!!!!',data);
-        setProjectData(data.Project);
+        setProjectData(data);
+        
 
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -38,22 +39,27 @@ useEffect(()=>{
 <ScrollView contentContainerStyle={styles.container}>
   
       {/* Render dynamic project views */}
-      {projectData.map((project,index) => 
-      <View key={project.SentProposal_ID} style={styles.projectContainer}>
-    <Text style={styles.movieName}>{project.ProposalData.Movie_Name}</Text>
-    <Text>ppopopopop{project.SentProposal_ID}</Text>
-    <Text style={styles.director}>Directed by {project.ProposalData.Director}</Text>
-    <Text style={styles.director}>Writer Name: {project.Writer_Name}</Text>
+      {projectData.map((projectData,index) => 
+      <View key={projectData.SentProposal_ID} style={styles.projectContainer}>
+    <Text style={styles.movieName}>{projectData.ProposalData.Movie_Name}</Text>
+    <Text>ppopopopop{projectData.SentProposal_ID}</Text>
+    <Text style={styles.director}>Directed by {projectData.ProposalData.Director}</Text>
+    <Text style={styles.director}>Writer Name: {projectData.Writer_Name}</Text>
     <Image
-      source={project.ProposalData.Image ? { uri: `${global.Url}/Images/${project.ProposalData.Image}` } : require('../Images/teefa.jpeg')}
+      source={projectData.ProposalData.Image ? { uri: `${global.Url}/Images/${projectData.ProposalData.Image}` } : require('../Images/teefa.jpeg')}
       style={styles.image}
     />
-    <TouchableOpacity style={styles.viewButton} onPress={() => { navigation.navigate('ShowView', project) }}>
+    <TouchableOpacity style={styles.viewButton} onPress={() => { navigation.navigate('ShowView', projectData) }}>
       <Text style={styles.buttonText}>View Details</Text>
     </TouchableOpacity>
   </View>
     
     )}
+{/*     
+    {projectData.map((projectData,index)=>
+      <View key={index}><Text>{projectData.Movie_ID}</Text></View>
+    )}  */}
+    
     </ScrollView>
     </View>
   );

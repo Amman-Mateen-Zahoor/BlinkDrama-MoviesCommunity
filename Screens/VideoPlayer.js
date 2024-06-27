@@ -26,6 +26,7 @@ const[test,SetTest]=useState('&autoplay=1')
 useEffect(()=>{},[videoUrl])
 useEffect(() => {
   console.log('Updated compoundUrl:', compoundUrl);
+  Alert.alert('Clip Added:')
 }, [compoundUrl]);
   const handleSliderChange = (values) => {
     setSliderValues(values);
@@ -146,7 +147,7 @@ animationType='slide'
        
       
         </View>
-        <View style={{alignSelf:'flex-start',paddingLeft:4,paddingEnd:5,flexDirection:'row'}}>
+        <View style={{flexDirection:'row'}}>
           <TouchableOpacity style={styles.button}
          onPress={()=>navigation.navigate('ShowWriterClips',{compound : compoundUrl, data1: dataa , videoId:dataa.videoId})}>
          <Text style={styles.buttonText}>show clips</Text>

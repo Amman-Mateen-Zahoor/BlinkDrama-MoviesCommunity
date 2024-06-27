@@ -1,11 +1,13 @@
-import { View,Image, Text, StyleSheet, Touchable, TouchableOpacity, TouchableHighlight, ScrollView } from 'react-native'
+import { View,Image, Text, StyleSheet, Touchable, TouchableOpacity, TouchableHighlight, ScrollView, Modal, TextInput, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import {WebView} from 'react-native-webview';
+import { ArrowLeftIcon } from 'react-native-heroicons/outline';
 
 
 
 const ReaderHome = ({navigation}) => {
 
+  const[visi,SetVisi]=useState(false)
   const[image,SetImage]=useState('')
     const[mname,SetMname]=useState('')
     const[type,SetType]= useState('')
@@ -59,6 +61,38 @@ login()
 fetchAcceptedProjectData()
 
       },[movie])
+      const[balance,SetBalance]=useState(500)
+
+      const BalanceRequest = async () => {
+        // Alert.alert('clickkkk')
+        try {
+          // Construct the URL with the sProId parameter
+          // Replace 'your_value_here' with the actual value
+          const response = await fetch(`${global.Url}/api/Reader/SendBalanceRequest?Reader_ID=${global.Readerid}&Amount=${balance}`, {
+            method: 'PUT',
+            
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+      
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+      
+          const data = await response.json();
+          if(data==='Subscription updated successfully'){
+          Alert.alert('Your Request has been sent Succsesfully!');
+          SetVisi(false)
+          // Handle success, maybe update UI
+        } } catch (error) {
+          console.error('Error updating summary:', error);
+          // Handle error, show error message to user
+        }
+      };
+
+
+
   return (
     <View style={styles.container}>
         <View contentContainerStyle={styles.proposalContainer}>
@@ -114,9 +148,32 @@ fetchAcceptedProjectData()
           style={styles.image}
           />
           <Text style={{color:'yellow'}}>{acceptedProject.ProposalData.Movie_Name}</Text>
-          <TouchableOpacity style={styles.button} >
+          <TouchableOpacity style={styles.button} onPress={()=>SetVisi(true)}>
         <Text style={styles.buttonText}>Paid</Text>
         </TouchableOpacity>
+        
+        <Modal
+        visible={visi}
+        transparent={false}
+        animationType='slide'
+        >
+          <View style={styles.container}>
+          <TouchableOpacity onPress={()=>SetVisi(false)}>
+      <ArrowLeftIcon size={30} color='yellow' / > 
+      </TouchableOpacity>
+      
+            <Text style={styles.title}> Recharge Balance</Text>
+            <TextInput placeholder='Enter Amount'
+        onChangeText={SetBalance} style={styles.inputContainer}></TextInput>
+ <View>
+        {/* <TouchableOpacity style={styles.button} onPress={sendproject}> */}
+        <TouchableOpacity style={styles.button} onPress={()=>{BalanceRequest()}}>
+        <Text style={styles.buttonText}>Send Balance </Text>
+        
+        </TouchableOpacity></View>
+
+          </View>
+        </Modal>
                     <View>
  
  </View>
@@ -125,6 +182,9 @@ fetchAcceptedProjectData()
             ))}
         </ScrollView>
 </View>
+
+
+
     </View>
   )
 }
@@ -204,6 +264,16 @@ borderWidth: 1,
           fontSize: 16,
           fontWeight: 'bold',
           textAlign: 'center',
+        },
+        inputContainer: {
+    
+          position: 'relative',
+          height: 40,
+          borderColor: 'gray',
+          borderWidth: 1,
+          marginBottom: 20,
+          flexDirection: 'row',
+          alignItems: 'center',
         },
 });
 

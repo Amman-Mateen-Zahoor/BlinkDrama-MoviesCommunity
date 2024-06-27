@@ -250,6 +250,7 @@ import {
   TouchableOpacity,
   Pressable,
   Image,
+  Alert,
 } from 'react-native';
 
 //import { Icon } from 'react-native-heroicons';
@@ -278,8 +279,15 @@ export default function Signup({navigation}) {
   const [password, setPassword] = useState('');
 
   const [email, setEmail] = useState('');
-  const[Interest,SetInterest]=useState('');
-
+  const [input, setInput] = useState('');
+  const[Interest,SetInterest]=useState([]);
+  const handleInputChange = (text) => {
+    setInput(text);
+    console.log('tttttttt',text)
+    const interestArray = text.split(',').map(item => item.trim());
+    console.log('inrrrr',interestArray)
+    SetInterest(text);
+  };
   const uplodeImage = async () => {
     const formData = new FormData();
     const role = selectedId == 1 ? 'Writer' : 'Reader';
@@ -303,12 +311,17 @@ export default function Signup({navigation}) {
     var data = await responce.json();
     console.warn(data)
     console.log("Clicked")
-    if(data!=null){
+    if(data!==null){
       if(data.Role === 'Reader') {
-        navigation.navigate('EditorMainScreen', data);
-      } 
-      (data.Role === 'Writer'); {
-        navigation.navigate('initial', data);
+        console.log('dataaaa',data)
+        Alert.alert(data.Role)
+        const ReaderId=data.Reader_ID;
+      global.Readerid=ReaderId
+      console.log('readeerr Iddd',`${global.Readerid}`)
+      // navigation.replace('Subscription', data);
+      navigation.replace('Login', data);
+      } else if (data.Role === 'Writer') {
+        navigation.navigate('Login', data);
       } 
     }
   };
@@ -419,7 +432,9 @@ export default function Signup({navigation}) {
       <TextInput
         style={style.input}
         placeholder="Interests"
-        onChangeText={SetInterest}></TextInput>
+        value={input}
+        onChangeText={handleInputChange}
+        ></TextInput>
       <TouchableOpacity style={style.button} onPress={uplodeImage}>
         <Text style={style.buttonText}>
           Signup

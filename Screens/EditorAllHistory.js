@@ -10,7 +10,7 @@ const EditorAllHistory = () => {
     useEffect(() => {
         const fetchProposalData = async () => {
             try {
-                const response = await fetch(global.Url + '/api/Editor/ShowSentProposals?editorId=1');
+                const response = await fetch(global.Url + `/api/Editor/ShowSentProposals?editorId=${global.EId}`);
                 const data = await response.json();
                 // console.log('no data', data)
                 setProposals(data);
@@ -27,7 +27,7 @@ const EditorAllHistory = () => {
     useEffect(() => {
         const fetchAcceptedProjectData = async () => {
             try {
-                const response = await fetch(global.Url +`/api/Editor/HistoryAcceptedprojectByEditor?Editor_ID=1`);
+                const response = await fetch(global.Url +`/api/Editor/HistoryAcceptedprojectByEditor?Editor_ID=${global.EId}`);
                 const data = await response.json();
                 console.log('no data', data)
                 const a = data.Project

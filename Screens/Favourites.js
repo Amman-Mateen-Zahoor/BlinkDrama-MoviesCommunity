@@ -96,17 +96,17 @@ const Favourites = ({ navigation ,route}) => {
       <Text style={styles.text}>Favourites</Text>
       {sentProposals.map((proposal, index) => (
         <View style={styles.proposalContainer} key={index}>
-          <Text style={styles.text2}>Write Summary</Text>
+          <Text style={styles.text2}>Favourite</Text>
           <View style={styles.detailsContainer}>
             <View style={styles.imageContainer}>
               {/* <Image source={require('../Images/teefa.jpeg')} style={styles.image} />
                */}
 
-<Image
+{/* <Image
       source={proposal.Image ? { uri: `${global.Url}/Images/${proposal.Image}` } : require('../Images/teefa.jpeg')}
 
     style={styles.image}
-            />
+            /> */}
             </View>
             <View style={styles.details}>
               <Text style={styles.detailText}>Movie Name: {proposal.MovieTitle}</Text>

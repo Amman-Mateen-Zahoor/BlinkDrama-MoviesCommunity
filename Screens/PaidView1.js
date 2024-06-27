@@ -1,3 +1,21 @@
+// import { StyleSheet, Text, View } from 'react-native'
+// import React from 'react'
+
+// const PaidView1 = ({route}) => {
+//   console.log(route.params.Movie_ID,'ee')
+//     return (
+//     <View>
+//       <Text>PaidView1</Text>
+//     </View>
+//   )
+// }
+
+// export default PaidView1
+
+// const styles = StyleSheet.create({})
+
+
+
 import { View, Text, StyleSheet,useWindowDimensions, Alert,Button, ScrollView, Modal,TouchableOpacity } from 'react-native'
 import React, { useEffect, useState,useCallback,useRef } from 'react'
 import {WebView} from 'react-native-webview';
@@ -6,7 +24,7 @@ import { AirbnbRating } from 'react-native-ratings';
 import YoutubePlayer from "react-native-youtube-iframe";
 import {  ArrowLeftIcon } from 'react-native-heroicons/outline';
 
-const ReaderShowFreeMovie = ({route}) => {
+const PaidView1 = ({route}) => {
   const[movieId,SetMovieId]=useState()
   const[writerId,SetWriterId]=useState()
     const [visible,SetVisible]=useState(false)
@@ -43,19 +61,18 @@ const ReaderShowFreeMovie = ({route}) => {
       console.log('I am summary',summary)
       console.log('writerid',writerId)
       console.log('movieid',movieId)
-//   showFreeMovie()
+      console.log('mmmmmmmmmmmmmm',route.params.Wid)
+
     },[currentUrlIndex,summary,writerId,movieId]);
     const showFreeMovie = async () => {
         try {
-            let se = route.params;
-            SetS(se)
-            console.log('ssssssssssssssss',se)
+           
           
-          const response = await fetch(global.Url + `/api/editor/ViewSentProject?Movie_ID=${s}`);
+          const response = await fetch(global.Url + `/api/editor/ViewSentProject1?Movie_ID=${route.params.Movie_ID}&WriterID=${route.params.Wid}`);
           const data = await response.json();
           console.log('View Project dataaaaaa:', data);
-SetWriterId(data.Summary[0].Writer_ID)
-SetMovieId(data.Movie_ID)
+
+
 console.log(writerId,movieId,'heeheheheh')
           const summarydata= data.Summary[0].Summary1;
         SetSummary(summarydata)
@@ -70,6 +87,7 @@ console.log(writerId,movieId,'heeheheheh')
       };
 
       useEffect(()=>{
+      
         showFreeMovie()
       },[s])
 
@@ -183,64 +201,6 @@ const Test=()=>{
 
 const[cModal,SetcModal]=useState(false)
 
-const AcceptedStatus = async (rating) => {
-  try {
-    const response = await fetch(`${global.Url}/api/Reader/UpdateWriterRating?writerId=${writerId}&rating=${rating}`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        // 'Content-Type': 'multipart/form-data',
-      }
-    });
-
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-
-    const data = await response.json();
-    console.log(data);
-
-    // Display alert with received data
-    Alert.alert(JSON.stringify(data));
-    // setReloadFlag(!reloadFlag);
-  } catch (error) {
-    console.error('Error:', error);
-    // Display error alert
-    alert('Error occurred while fetching data.');
-  }
-};
-
-
-const AcceptedStatus2 = async (rating) => {
-  try {
-    const response = await fetch(`${global.Url}/api/Reader/UpdateMovieRating?movieId=${movieId}&rating=${rating}`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        // 'Content-Type': 'multipart/form-data',
-      }
-    });
-
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-
-    const data = await response.json();
-    console.log(data);
-
-    // Display alert with received data
-    Alert.alert(JSON.stringify(data));
-    // setReloadFlag(!reloadFlag);
-  } catch (error) {
-    console.error('Error:', error);
-    // Display error alert
-    alert('Error occurred while fetching data.');
-  }
-};
-
-
-
-
   return (
     <View style={styles.container}>
 
@@ -338,34 +298,31 @@ animationType='slide'
         </Modal>
       
        <View style={{flexDirection:'row',paddingTop:20}}>
-        <Text style={{
+       <Text style={{
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 20,
         textAlign: 'center',
         color: '#FFFFFF', // White color
-    }}> Rate Writer  </Text> 
+    }}> Rate Writer  </Text>
        
-         <AirbnbRating
+        <AirbnbRating
 
         count={5}
         defaultRating={3}
         
         size={20}
         showRating={false}
-        onFinishRating={(rating)=>AcceptedStatus(rating)
-          // ()=>AcceptedStatus(item.Balance_ID) 
-          }
         // onFinishRating={(rating)=>alert('Rating Added')}
-         /> 
-         {/* <AirbnbRating
+         />
+        {/* <AirbnbRating
   count={11}
   reviews={["Terrible", "Bad", "Meh", "OK", "Good", "Hmm...", "Very Good", "Wow", "Amazing", "Unbelievable"]}
   defaultRating={11}
   size={20}
-/>  */}
+/> */}
 </View>
- <View style={{flexDirection:'row',paddingTop:20}}>
+<View style={{flexDirection:'row',paddingTop:20}}>
        <Text style={{
         fontSize: 18,
         fontWeight: 'bold',
@@ -381,13 +338,12 @@ animationType='slide'
         
         size={20}
         showRating={false}
-        // onFinishRating={(rating)=>console.log('ratttting',rating)
-        onFinishRating={(rating)=>AcceptedStatus2(rating)
-        // ()=>AcceptedStatus(item.Balance_ID) 
+        onFinishRating={(rating)=>console.log('ratttting',rating)
+          
         }
          />
-         </View> 
-          <Button title='Add Favourite' onPress={()=>sendProject()}></Button> 
+         </View>
+         <Button title='Add Favourite' onPress={()=>sendProject()}></Button>
 </ScrollView>
     </View>
   )
@@ -443,4 +399,4 @@ const styles = StyleSheet.create({
   });
   
 
-export default ReaderShowFreeMovie
+export default PaidView1

@@ -34,5 +34,6 @@ import Subscription from './Screens/Subscription';
 import ReaderSeeAllBtn from './Screens/ReaderSeeAllBtn';
 import TestMultipleVideos from './Screens/TestMultipleVideos';
 import CcheckIFrame from './Screens/CcheckIFrame'
+import BalanceRequest from './Screens/BalanceRequest';
 
 AppRegistry.registerComponent(appName, () =>App);

@@ -1,17 +1,47 @@
-import { View,Image, Text, StyleSheet, Touchable, TouchableOpacity, TouchableHighlight, ScrollView } from 'react-native'
+import { View,Image, Text, StyleSheet, Touchable,TextInput, TouchableOpacity, TouchableHighlight, ScrollView
+  ,FlatList,ActivityIndicator
+ } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import {WebView} from 'react-native-webview';
-
+import Ionicons from 'react-native-vector-icons/dist/Ionicons';
+import {useTheme} from '@react-navigation/native'
+import MiniCard from '../Screens/MiniCard'
+import ReaderSearchPaid from './ReaderSearchPaid';
 
 
 const ReaderPaidHome = ({navigation}) => {
 
+
+  const {colors} =  useTheme()
+  const [value,setValue] = useState("")
+  const [miniCardData,setMiniCard] = useState([])
+  const [loading,setLoading] = useState(false)
   const[image,SetImage]=useState('')
     const[mname,SetMname]=useState('')
     const[mid,SetMId]=useState('')
     const[type,SetType]= useState('')
     const [acceptedProject, setAcceptedProject] = useState([]);
+    const [acceptedProject1, setAcceptedProject1] = useState([]);
+
     const [projectimage,SetProjectImage]= useState('')
+
+    const fetchData = async () => {
+      
+      
+      try {
+        const response = await fetch(global.Url +`/api/Reader/GetAllMovies?genre=${value}&searchTerm=${value}`);
+        const data = await response.json();
+        console.log('no data', data)
+        const a = data
+        setMiniCard(a)
+        console.log('lllllllll',miniCardData)        
+    
+        
+    } catch (error) {
+        console.error('Error fetching proposal data:', error);
+    } 
+  }
+
+
     const fetchAcceptedProjectData = async () => {
       try {
           const response = await fetch(global.Url +`/api/Editor/HistoryAcceptedprojectByEditor?Editor_ID=1`);
@@ -30,6 +60,35 @@ const ReaderPaidHome = ({navigation}) => {
           console.error('Error fetching proposal data:', error);
       }
   };
+
+  const fetchAccordingToInterests = async () => {
+    try {
+        const response = await fetch(global.Url +`/api/Reader/IssuePaidMovie`);
+        const data = await response.json();
+        console.log('no data Interestsssssssss', data)
+        const a = data.Project[0].ProposalData
+        console.log('jjjjjjjjjjjj',a)
+
+        const b = data.Project[0].WriterData
+        console.log('jjjjjjjjjjjj',b)
+        console.log('ppp',data.Project[0].Writer_ID)
+
+        setAcceptedProject1(data.Project);
+        // console.log(acceptedProject1,'llllllllllllllllllllllllllll')
+        SetMId()
+        // console.log('no data projectttttttttttttt 1', data.Project)
+        // console.log('useeeestaattttee',acceptedProject)
+        // const pimage= data.Project[0].ProposalData.Image
+        // console.log('no data projectttttttttttttt 2', pimage)
+        // SetProjectImage(pimage)
+        
+    } catch (error) {
+        console.error('Error fetching proposal data:', error);
+    }
+};
+
+
+
     const login = async () => {
         try {
           const response = await fetch(global.Url + `/api/Reader/IssueFreeMovie?readerId=1560688237`);
@@ -60,14 +119,70 @@ const ReaderPaidHome = ({navigation}) => {
             useEffect(()=>{
 login()
 fetchAcceptedProjectData()
+fetchAccordingToInterests()
 
       },[movie])
   return (
+    
     <View style={styles.container}>
+      <ScrollView>
+        <View style={{
+          
+          backgroundColor:'#1A202C'
+        //   marginTop:Constant.statusBarHeight,
+          }}>
+          <View style={{
+              padding:5,
+              flexDirection:"row",
+              justifyContent:"space-around",
+              elevation:5,
+              backgroundColor:colors.headerColor
+        
+          }}>
+             <Ionicons
+             style={{color:'black'}}
+             name="arrow-back-outline" size={32}
+             onPress={()=>navigation.goBack()}
+             />
+             <TextInput
+             style={{
+                 width:"70%",
+                 //backgroundColor:"#e6e6e6"
+                 backgroundColor:"#333333"
+                }}
+             value={value}
+             onChangeText={(text)=>setValue(text)}
+
+             />
+             <Ionicons
+              style={{color:'grey'}}
+             name="search"
+             size={32}
+             onPress={()=>fetchData()}
+             />
+          </View>
+           {loading ?<ActivityIndicator style={{marginTop:10}} size="large" color="red"/>:null } 
+          <FlatList
+           data={miniCardData}
+           renderItem={({item})=>{
+             console.log('itemmmmmmmmmmmmmmmmmmmmmmmmmmmmm',item)
+               return <ReaderSearchPaid
+               MovieName={item.Name}
+               />
+           }}
+           
+          />
+        
+      </View>
         <View contentContainerStyle={styles.proposalContainer}>
-            <Text style={styles.title}>Home</Text>
+            <Text style={styles.title}></Text>
+
+          
+
+
                 <View style={styles.proposalContainer} >
                 <TouchableOpacity onPress={()=>navigation.navigate('readerfreeshow',movie)}><View >
+                  
     <View style={styles.view1}>
       <Text style={styles.text2}>
         Top Rated Movie</Text>
@@ -100,7 +215,7 @@ fetchAcceptedProjectData()
                 </View>
             
         </View>
-      
+        
       <View style={styles.RowView}>
       <TouchableOpacity><Text style={styles.RowText}>Top Pick For You                                        </Text>
       </TouchableOpacity>
@@ -117,7 +232,7 @@ fetchAcceptedProjectData()
           style={styles.image}
           />
           <Text style={{color:'yellow'}}>{acceptedProject.ProposalData.Movie_Name}</Text>
-          <Text style={{color:'yellow'}}>{acceptedProject.Movie_ID}</Text>
+          {/* <Text style={{color:'yellow'}}>{acceptedProject.Movie_ID}</Text> */}
 
           <TouchableOpacity style={styles.button} onPress={()=>{{navigation.navigate('paidShowMovie',{ Movie_ID: acceptedProject.Movie_ID })}}} >
         <Text style={styles.buttonText}>view</Text>
@@ -130,6 +245,42 @@ fetchAcceptedProjectData()
             ))}
         </ScrollView>
 </View>
+
+<View style={styles.RowView}>
+      <TouchableOpacity><Text style={styles.RowText}>According To Interests                                        </Text>
+      </TouchableOpacity>
+      {/* <TouchableOpacity
+      onPress={()=>navigation.navigate('Seeallbtnpaid')}
+      >
+        <Text>See All</Text></TouchableOpacity> */}
+      </View>
+      <View>
+<ScrollView contentContainerStyle={styles.container} horizontal={true}>
+            
+           {acceptedProject1.map((acceptedProject1, index) => (
+                <View style={styles.proposalContainer} key={index}>
+                    <Image source={acceptedProject1.ProposalData.Image ? { uri: `${global.Url}/Images/${acceptedProject1.ProposalData.Image}` } : require('../Images/teefa.jpeg')} 
+          style={styles.image}
+          />
+         
+          <Text style={{color:'yellow'}}>{acceptedProject1.ProposalData.Movie_Name}</Text> 
+
+          <Text style={{color:'yellow'}}>Writer: {acceptedProject1.WriterData.UserName}</Text>
+
+          <TouchableOpacity style={styles.button} onPress={()=>{{navigation.navigate('paid',{ Movie_ID: acceptedProject1.Movie_ID,Wid:acceptedProject1.Writer_ID })}}} >
+        <Text style={styles.buttonText}>view</Text>
+        </TouchableOpacity>
+                    <View>
+ 
+ </View>
+                
+                </View>
+            ))}
+        </ScrollView>
+</View>
+      
+
+</ScrollView>
     </View>
   )
 }
@@ -144,7 +295,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 24,
         fontWeight: 'bold',
-        marginBottom: 20,
+    
         textAlign: 'center',
         color: '#FFFFFF', // White color
     },

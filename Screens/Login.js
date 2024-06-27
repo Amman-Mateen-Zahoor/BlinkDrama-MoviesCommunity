@@ -45,7 +45,15 @@ const login = async () => {
     
     
     else if (data.Role === 'Editor') {
+      const user= data.UserData[0].Editor_ID
+      console.log('user',user)
+      global.EId=user
+      console.log(`${global.EId}`,'WNAMEEEEEEEEEEEee')
+
       navigation.navigate('EditorMainScreen', data);
+    } 
+    else if (data.Role === 'Admin') {
+      navigation.navigate('admin', data);
     } 
     
     else if (data.Role === 'Reader') {
@@ -54,7 +62,15 @@ const login = async () => {
       global.Readerid=ReaderId
       console.log('readeerr Iddd',`${global.Readerid}`)
 
-      if(data.UserData[0].Balance==0){
+      const Readeremail=data.UserData[0].Email;
+      global.Readeremail=Readeremail
+      console.log('readeerr Iddd',`${global.Readeremail}`)
+
+      const Readerpassword=data.UserData[0].Password;
+      global.Readerpassword=Readerpassword
+      console.log('readeerr Iddd',`${global.Readerpassword}`)
+
+      if(data.UserData[0].Balance==null){
       navigation.navigate('ReadersTab', data);
     }
     else

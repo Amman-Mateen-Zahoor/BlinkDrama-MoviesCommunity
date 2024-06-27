@@ -15,13 +15,10 @@ const ShowingWritreCliping = ({ route }) => {
 
 const[visible,SetVisible]=useState(false)
 const YouTubePlayer = ({ End_time, Start_time, Title, clip, id }) => {
-  const [playing, setPlaying] = useState(false);
+  const [playing, setPlaying] = useState(true);
 
-  const onStateChange = (state) => {
-    if (state === 'ended') {
-      setPlaying(false);
-    }
-  };
+
+  
 
   return (
     <View key={id} style={{ marginBottom: 20 }}>
@@ -69,10 +66,10 @@ const videoIds = clips.map(clip => clip.clip);
     try{
 
     let data = await route.params;
-  console.log('i am showwriteer data', data);
-  console.log('data of compound clips', data.compound) 
+  // console.log('i am showwriteer data', data);
+  // console.log('data of compound clips', data.compound) 
   const apple=data.data1.midata
-  console.log('imm aple',apple)
+  // console.log('imm aple',apple)
   SetApple(apple)
   SetSentClip(data.compound)
   SetData(data.compound)
@@ -89,22 +86,13 @@ useEffect(()=>{
   console.log('clipssss of useeffect',clips)
 },[clips])
   
-  const onStateChange = useCallback((state) => {
-    if (state === "ended") {        
-      handleVideoChange();
-      console.log(currentIndex,'cccccccc')
-      
-    }
-  }, [currentIndex,clips]);
 
-  const togglePlaying = useCallback(() => {
-    setPlaying((prev) => !prev);
-  }, []);
+ 
 
 
   const handleVideoChange = () => {
     if(currentIndex===videoIds.length){
-      setPlaying(false)
+      setPlaying(true)
     }
     else{
     const nextIndex = (currentIndex + 1) % videoIds.length;
@@ -154,7 +142,14 @@ const sendproject = async () => {
   }
 };
 
-
+const onStateChange = useCallback(state => {
+  console.log('onStateChange called with state:', state); // Added logging
+  if (state === "ended") {
+    console.log(state, 'stateee');
+    Alert.alert("Video has finished playing!");
+    handleVideoChange();
+  }
+}, [currentIndex, clips]);
 
   return (
     <View style={styles.container}>
@@ -203,10 +198,11 @@ animationType='slide'
         marginBottom: 20,
         textAlign: 'center',
         color: '#FFFFFF', // White color
-    }}>Watch Compound Clip</Text>
-<View style={{flex:0.5}}>
+    }}>HighLights</Text>
+{/* <View style={{flex:0.5}}>
       
   {clips.length > 0 && (
+    
         <YoutubePlayer
           key={clips[currentIndex].id}
           height={300}
@@ -217,11 +213,13 @@ animationType='slide'
             end: clips[currentIndex].End_time,
           }}
           onChangeState={onStateChange}
-       / >
+       />
         
         
       )}
-</View >
+     
+        
+</View > */}
 <View style={{paddingBottom:10}}>
     <Button title='show Single Clips' onPress={()=>SetVisible(true)}></Button></View>
 <View>
@@ -297,4 +295,9 @@ const styles = StyleSheet.create({
     
   },
 });
+
+
+
+
+
 
