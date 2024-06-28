@@ -119,15 +119,18 @@ const SearchScreen = ({navigation , route})=>{
     
     let data= route.params;
     console.log('hiiiiii',data)
+   
     useEffect(()=>{
         
           setSentPropossal(data)
-          global.SentProposalData=data.SentProposal_ID
+          if(data!==null){
+          global.SentProposalData=data?.proposal.SentProposal_ID
       console.log('SentProposal_ID',`${global.SentProposalData}`)
-      global.Movie_ID=data.Movie_ID
+      global.Movie_ID=data.proposal.Movie_ID
       console.log('Movie_ID',`${global.Movie_ID}`)
-      global.Writer_ID=data.Writer_ID
+      global.Writer_ID=data.proposal.Writer_ID
       console.log('Writer_ID',`${global.Writer_ID}`)
+    }
         
        
       },[])

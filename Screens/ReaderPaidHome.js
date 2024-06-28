@@ -21,7 +21,7 @@ const ReaderPaidHome = ({navigation}) => {
     const[type,SetType]= useState('')
     const [acceptedProject, setAcceptedProject] = useState([]);
     const [acceptedProject1, setAcceptedProject1] = useState([]);
-
+const[search,SetSearch]=useState()
     const [projectimage,SetProjectImage]= useState('')
 
     const fetchData = async () => {
@@ -61,11 +61,26 @@ const ReaderPaidHome = ({navigation}) => {
       }
   };
 
+const GenericSearch = () =>{
+if(search!==null){
+  const array = search.find((item)=>{
+    console.log('findddddddd',item)
+
+  })
+}
+}
+
+
+
   const fetchAccordingToInterests = async () => {
     try {
         const response = await fetch(global.Url +`/api/Reader/IssuePaidMovie`);
         const data = await response.json();
-        console.log('no data Interestsssssssss', data)
+        // console.log('no data Interestsssssssss', data)
+        SetSearch(data.Project)
+        if(data!==null){
+        console.log(search)
+      }
         const a = data.Project[0].ProposalData
         console.log('jjjjjjjjjjjj',a)
 
@@ -120,6 +135,7 @@ const ReaderPaidHome = ({navigation}) => {
 login()
 fetchAcceptedProjectData()
 fetchAccordingToInterests()
+// GenericSearch()
 
       },[movie])
   return (

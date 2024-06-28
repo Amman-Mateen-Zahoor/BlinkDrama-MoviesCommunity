@@ -212,7 +212,7 @@
 
 
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Button,KeyboardAvoidingView ,Image,Modal,Pressable,TextInput } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Button,KeyboardAvoidingView ,Image,Modal,Pressable,TextInput, ScrollView } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 import { UserCircleIcon, ArrowRightIcon,BellIcon, ArrowLeftIcon } from 'react-native-heroicons/outline';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -236,6 +236,7 @@ const EditorSendProposal = ({navigation,route}) => {
   const [refreshComponent, setRefreshComponent] = useState(false);
   const[writerId,SetWId]=useState('');
   const[episode,SetEpisode]=useState(0);
+  const[cast,setCast]=useState()
   const [image,SetImage]= 
   useState
   ('')
@@ -336,6 +337,7 @@ const EditorSendProposal = ({navigation,route}) => {
     formData.append('DueDate', formattedDate);
     formData.append('WriterId',encodedWriter)
     formData.append('balance',balance)
+    formData.append('Cast', cast);
     
     const responce = await fetch(global.Url + '/api/Editor/SentProposal', {
       method: 'POST',
@@ -393,7 +395,7 @@ const[editable,setIsEditable]=useState(false)
     formData.append('Director', director);
     formData.append('Image', imageData);
     formData.append('Cover_Image', imageData);
-    
+    formData.append('Cast', cast);
     
     const responce = await fetch(global.Url + '/api/Editor/SentMovie', {
       method: 'POST',
@@ -431,6 +433,7 @@ const[editable,setIsEditable]=useState(false)
 
   return (
     <View style={styles.container}>
+      <ScrollView>
     <KeyboardAvoidingView style={styles.containerKey} behavior={Platform.OS === "ios" ? "padding" : null}>
     
       <View style={{flexDirection:'row'}}>
@@ -449,6 +452,7 @@ const[editable,setIsEditable]=useState(false)
           console.log('I am selected Movie  '.selectedMovie)
           setDirector(data[0].Director);
           setCategory(data[0].Category);
+          setCast(data[0].Cast);
           SetImage(data[0].Image)
           SetType(data[0].Type)
           if(data[0].Type=='Drama'){
@@ -496,6 +500,8 @@ const[editable,setIsEditable]=useState(false)
         onChangeText={SetType} style={styles.inputContainer}></TextInput>
         <TextInput placeholder='Director'
         onChangeText={setDirector} style={styles.inputContainer}></TextInput>
+        <TextInput placeholder='Cast'
+        onChangeText={setCast} style={styles.inputContainer}></TextInput>
         {/* <TextInput placeholder='Due_Date'
         onChangeText={SetDueDate}></TextInput> */}
         <View>
@@ -538,8 +544,10 @@ const[editable,setIsEditable]=useState(false)
       </View>
       <View style={styles.inputContainer}>
         <Text>Type: {type}</Text>
+        
        
       </View>
+     
       </View>
 
       <View>
@@ -586,7 +594,13 @@ onChangeText={SetEpisode}
         </TouchableOpacity>
         
       </View>
+      <View style={styles.inputContainer}>
+        <Text>Cast: {cast}</Text>
+        
+       
+      </View>
       </KeyboardAvoidingView>
+      </ScrollView>
     </View>
     
   );

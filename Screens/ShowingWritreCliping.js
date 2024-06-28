@@ -27,7 +27,7 @@ const YouTubePlayer = ({ End_time, Start_time, Title, clip, id }) => {
         height={300}
         play={playing}
         videoId={clip}
-        onChangeState={onStateChange}
+        // onChangeState={onStateChange}
         initialPlayerParams={{
           start: Start_time,
           end: End_time,
@@ -142,14 +142,25 @@ const sendproject = async () => {
   }
 };
 
-const onStateChange = useCallback(state => {
-  console.log('onStateChange called with state:', state); // Added logging
+// const onStateChange = useCallback(state => {
+//   console.log('onStateChange called with state:', state); // Added logging
+//   if (state === "ended") {
+//     console.log(state, 'stateee');
+//     Alert.alert("Video has finished playing!");
+//     handleVideoChange();
+//   }
+// }, [currentIndex, clips]);
+
+const op = useCallback((state) => {
   if (state === "ended") {
-    console.log(state, 'stateee');
+    // setPlaying(true);
     Alert.alert("Video has finished playing!");
+    
+      
     handleVideoChange();
+    
   }
-}, [currentIndex, clips]);
+}, [currentIndex]);
 
   return (
     <View style={styles.container}>
@@ -199,7 +210,7 @@ animationType='slide'
         textAlign: 'center',
         color: '#FFFFFF', // White color
     }}>HighLights</Text>
-{/* <View style={{flex:0.5}}>
+<View style={{flex:0.5}}>
       
   {clips.length > 0 && (
     
@@ -211,15 +222,16 @@ animationType='slide'
           initialPlayerParams={{
             start: clips[currentIndex].Start_time,
             end: clips[currentIndex].End_time,
+            
           }}
-          onChangeState={onStateChange}
+          onChangeState={op}
        />
         
         
       )}
      
         
-</View > */}
+</View >
 <View style={{paddingBottom:10}}>
     <Button title='show Single Clips' onPress={()=>SetVisible(true)}></Button></View>
 <View>
